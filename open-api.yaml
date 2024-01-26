@@ -1,0 +1,99 @@
+openapi: 3.0.1
+info:
+  derciption: "this api manage one discord bank bot for RP servers in Discord"
+  vertion: "1.0.6"
+  title: PICSOU BANK Bot
+server:
+  -url: 'http:localhost:8000'
+  variables:
+    protocol:
+      enum:
+        - http
+        - https
+      default: http
+    serveur:
+      defaults: localhost:8000
+tags:
+  - name: contacts
+    description: use accounts and transactions
+  - name: bank accounts
+    description: contains money of contacts
+  - name: exchanges
+    description: cash flows between accounts
+paths:
+  /contacts/login:
+    post:
+      tags:
+        "contacts"
+      summary: Login as user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: "OK"
+        "404":
+          description: "User not found"
+        "500":
+          description: "Server ERROR"
+
+  /accounts/login:
+    post:
+      tags:
+        "accounts"
+      summary: Login to an account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [identifier, password]
+              properties:
+                identifier:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: "you are connected"
+        "404":
+          description: "invalid identifier"
+        "500":
+          description: "Server ERROR"
+
+  /exchanges:
+    post:
+      tags:
+        "exchanges,
+        accounts"
+      summary: Do one account transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [youridentifier, yourpassword, cibleidentifier, sum]
+              properties:
+                youridentifier:
+                  type: string
+                yourpassword:
+                  type: string
+                cibleidentifier:
+                  type: string
+                sum:
+                  type: float
+      responses:
+        "200":
+          description: "you are connected"
+        "404":
+          description: "invalid identifier"
+        "500":
+          description: "Server ERROR"
+
+
+
