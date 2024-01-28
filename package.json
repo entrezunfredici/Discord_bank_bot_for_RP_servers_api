@@ -4,7 +4,8 @@
   "description": "Bank bot for RP servers in discord",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest app.js",
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
