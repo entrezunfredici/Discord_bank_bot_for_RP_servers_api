@@ -8,7 +8,8 @@ app.use(express.json())
     pour ajouter un router au serveur il est nécéssaire d'utiliser les deux commandes suivantes:
     et remplacer <router> par le nom de votre routeur
     yourRouter par le nom que vous voulez
-    et nyourService par le nom de votre service
+    et yourService par le nom de votre service
+    const booksRouter = require('./routers/<router>')
 */
 
 module.exports = app
