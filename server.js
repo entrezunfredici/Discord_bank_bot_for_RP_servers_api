@@ -8,5 +8,5 @@ db.instance.sync({force: true}).then(async () =>{
         console.log('Server is running on port', port)
     })
 }).catch((e) => {
-    console.rerror(e);
+    console.error(e);
 })
