@@ -9,7 +9,8 @@ app.use(express.json())
     et remplacer <router> par le nom de votre routeur
     yourRouter par le nom que vous voulez
     et yourService par le nom de votre service
-    const booksRouter = require('./routers/<router>')
+    const yourRouter = require('./routers/<router>')
+    app.use('/<router>', yourRouter)
 */
 
 module.exports = app
