@@ -6,7 +6,8 @@ commands= {
         "npm install nodemon --save-dev",
         "npm install sequelize",
         "npm install mysql2",
-        "npm install sqlite3"
+        "npm install sqlite3",
+        "npm install --save-dev jest supertest"
         }
 for command in commands:
     print("execution de la commande ⇒  "+command)
