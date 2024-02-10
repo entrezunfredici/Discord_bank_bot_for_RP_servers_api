@@ -12,10 +12,6 @@ module.exports = (instance) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        identifier: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
         password: {
             type: DataTypes.STRING,
             allownull: false

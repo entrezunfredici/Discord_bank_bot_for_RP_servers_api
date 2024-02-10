@@ -267,10 +267,10 @@ paths:
         content:
           application/json:
             schema:
-              required: [identifier, password]
+              required: [id, password]
               properties:
-                identifier:
-                  type: string
+                id:
+                  type: int
                 password:
                   type: string
       responses:
@@ -290,22 +290,14 @@ paths:
         content:
           application/json:
             schema:
-              required: [identifier, password, beneficiary_id]
+              required: [password, beneficiary_id]
               properties:
-                identifier:
-                  type: string
                 password:
                   type: string
                 beneficiary_id:
                   type: integer
-                holder_ids:
-                  type: int[]
                 sold:
                   type: int
-                exchange_ids:
-                  type: int[]
-                automaticCashWithdrawal_ids:
-                  type: int[]
       responses:
         "201":
           description: "OK"
@@ -408,14 +400,14 @@ paths:
         content:
           application/json:
             schema:
-              required: [youridentifier, yourpassword, cibleidentifier, sum]
+              required: [yourid, yourpassword, cibleid, sum]
               properties:
-                youridentifier:
-                  type: string
+                yourid:
+                  type: int
                 yourpassword:
                   type: string
-                cibleidentifier:
-                  type: string
+                cibleid:
+                  type: int
                 sum:
                   type: float
       responses:
