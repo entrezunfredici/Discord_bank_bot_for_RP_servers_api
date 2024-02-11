@@ -8,9 +8,6 @@ router.get('/Id=:Id', accountController.getAccountById);
 router.post('/login', accountController.accountLogin);
 //route pour ajouter un compte
 router.post('/add', accountController.addAccount);
-//💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩
-//💩   trasactions are not yet working      💩
-//💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩
 router.post('/transaction', accountController.accountBalance);
 
 module.exports = router;

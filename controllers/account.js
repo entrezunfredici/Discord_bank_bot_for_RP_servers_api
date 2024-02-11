@@ -45,12 +45,8 @@ exports.accountLogin = async (req, res, next) => {
     }
 }
 
-//💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩
-//💩   trasactions are not yet working      💩
-//💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩
 exports.accountBalance = async (req, res, next) => {
     const {id, userId, sum, type} = req.body
-
     try{
         const change = await accountService.changeBalance(id, userId, sum, type)
         if(change){
@@ -58,6 +54,6 @@ exports.accountBalance = async (req, res, next) => {
         }
         return res.status(400).json({success: false})
     } catch(e) {
-        return res.status(500).json("💩error💩")
+        return res.status(404).json("error")
     }
 }

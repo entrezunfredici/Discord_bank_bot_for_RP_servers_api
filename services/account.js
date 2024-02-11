@@ -52,11 +52,8 @@ exports.accountLogin = async (userId, id, password) => {
     }
 }
 
-//💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩
-//💩   trasactions are not yet working      💩
-//💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩
 exports.changeBalance = async (id, userId, sum, type) => {
-    account= await this.getAccountById(id)
+    const account= await this.getAccountById(id)
     if(!account){
         throw new BadRequest("this account doesn't exist")
     }
@@ -65,10 +62,19 @@ exports.changeBalance = async (id, userId, sum, type) => {
     if(rights=="RW"){
         switch(type){
             case "withdrawal":
-                account.balance-=sum
+                if(sum>account.balance){
+                    throw new BadRequest("you don't have enough money")
+                }
+                sum = account.balance-sum 
+                account.update({
+                    balance: sum
+                })
                 break
             case "payment":
-                account.balance+=sum
+                sum += account.balance
+                account.update({
+                    balance: sum
+                })
                 break
             default:
                 throw new BadRequest("this transaction doesn't exist")
@@ -76,5 +82,5 @@ exports.changeBalance = async (id, userId, sum, type) => {
     }else{
         throw new BadRequest("you haven't access rights")
     }
-    return account.balance
+    return account
 }
