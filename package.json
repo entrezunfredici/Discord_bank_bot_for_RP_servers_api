@@ -17,6 +17,8 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "express": "^4.18.2",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
     "mysql2": "^3.9.1",
     "sequelize": "^6.36.0",

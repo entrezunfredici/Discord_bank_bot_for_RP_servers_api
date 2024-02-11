@@ -1,4 +1,5 @@
 const { account } = require('../models')
+const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
 exports.getAccountByBeneficiaryId = async (beneficiaryId) => {
     return account.findAll({
@@ -37,7 +38,7 @@ exports.addAccount = async (beneficiaryId, password, balance) => {
 exports.accountLogin = async (userId, id, password) => {
     const account = await this.getAccountById(id)
     if(!account){
-        throw new BadRequest("identifier or password are invalid")
+        throw new NotLogged("identifier or password are invalid")
     }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire R)
     rights="R"
@@ -45,17 +46,17 @@ exports.accountLogin = async (userId, id, password) => {
         if(account.password==password){
             return account
         }else{
-            throw new BadRequest("identifier or password are invalid")
+            throw new NotLogged("identifier or password are invalid")
         }
     }else{
-        throw new BadRequest("you haven't access rights")
+        throw new NotFound("you haven't access rights")
     }
 }
 
 exports.changeBalance = async (id, userId, sum, type) => {
     const account= await this.getAccountById(id)
     if(!account){
-        throw new BadRequest("this account doesn't exist")
+        throw new NotFound("this account doesn't exist")
     }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire RW)
     rights="RW"
@@ -80,7 +81,7 @@ exports.changeBalance = async (id, userId, sum, type) => {
                 throw new BadRequest("this transaction doesn't exist")
         }
     }else{
-        throw new BadRequest("you haven't access rights")
+        throw new NotLogged("you haven't access rights")
     }
     return account
 }

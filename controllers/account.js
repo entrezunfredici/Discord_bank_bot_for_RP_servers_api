@@ -1,8 +1,11 @@
 const accountService = require('../services/account')
+const createError = require('http-errors');
+const { ServerError } = require('../errors');
+
 
 exports.getAccountByBeneficiaryId = async (req, res, next)  => {
     const account = await accountService.getAccountByBeneficiaryId(req.params.beneficiaryId)
-    if(account){
+    if(account!=0){
         res.json({success: true, data: account})
     }else{
         res.status(404).json("this beneficiary haven't bank account")
@@ -27,7 +30,7 @@ exports.addAccount = async (req, res, next) => {
         }
         return res.status(201).json({success: true, account})
     } catch(e) {
-        return res.status(500).json("error")
+        return next(createError(e.statusCode, e.message))
     }
 }
 
@@ -41,7 +44,7 @@ exports.accountLogin = async (req, res, next) => {
         }
         return res.status(400).json({success: false})
     } catch(e) {
-        return res.status(404).json("no account")
+        return next(createError(e.statusCode, e.message))
     }
 }
 
@@ -54,6 +57,6 @@ exports.accountBalance = async (req, res, next) => {
         }
         return res.status(400).json({success: false})
     } catch(e) {
-        return res.status(404).json("error")
+        return next(createError(e.statusCode, e.message))
     }
 }
