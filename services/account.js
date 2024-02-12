@@ -1,4 +1,5 @@
 const { account } = require('../models')
+const bcrypt = require('bcrypt')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
 exports.getAccountByBeneficiaryId = async (beneficiaryId) => {
@@ -18,19 +19,19 @@ exports.getAccountById = async (id) => {
 }
 
 exports.addAccount = async (beneficiaryId, password, balance) => {
-    if(balance){
-        return account.create({
-            beneficiaryId,
-            password,
-            balance
+    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de creer C)
+    createRights=true
+    if(createRights){
+        if(!balance){
+            balance=0
+        }
+        return bcrypt.hash(password, 10).then((hash) => {
+            return account.create({beneficiaryId, password: hash, balance})
+        }).catch((e) => {
+            throw new ServerError(e.message)
         })
     }else{
-        balance=0
-        return account.create({
-            beneficiaryId,
-            password,
-            balance
-        })
+        throw new NotLogged("you haven't access rights")
     }
 }
 
@@ -41,13 +42,13 @@ exports.accountLogin = async (userId, id, password) => {
         throw new NotFound("identifier or password are invalid")
     }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire R)
-    rights="R"
-    if(rights=="R"){
-        if(account.password==password){
-            return account
-        }else{
-            throw new NotFound("identifier or password are invalid")
+    readRights=true
+    if(readRights){
+        const verifiedConnection = await bcrypt.compare(password, account.password)
+        if (!verifiedConnection) {
+            throw new NotLogged('password incorrect for username')
         }
+        return account
     }else{
         throw new NotFound("you haven't access rights")
     }
@@ -58,9 +59,9 @@ exports.changeBalance = async (id, userId, sum, type) => {
     if(!account){
         throw new NotFound("this account doesn't exist")
     }
-    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire RW)
-    rights="RW"
-    if(rights=="RW"){
+    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
+    writeRights=true
+    if(writieRights){
         switch(type){
             case "withdrawal":
                 if(sum>account.balance){
@@ -87,9 +88,9 @@ exports.changeBalance = async (id, userId, sum, type) => {
 }
 
 exports.deleteAccountByID = (id, userid) => {
-    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de supression RWCD)
-    rights="RWCD"
-    if(rights=="RWCD"){
+    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de supression D)
+    deleteRights=true
+    if(deleteRights){
         return account.destroy({
             where: {
                 id
