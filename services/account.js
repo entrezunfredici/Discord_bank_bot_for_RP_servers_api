@@ -38,7 +38,7 @@ exports.addAccount = async (beneficiaryId, password, balance) => {
 exports.accountLogin = async (userId, id, password) => {
     const account = await this.getAccountById(id)
     if(!account){
-        throw new NotLogged("identifier or password are invalid")
+        throw new NotFound("identifier or password are invalid")
     }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire R)
     rights="R"
@@ -46,7 +46,7 @@ exports.accountLogin = async (userId, id, password) => {
         if(account.password==password){
             return account
         }else{
-            throw new NotLogged("identifier or password are invalid")
+            throw new NotFound("identifier or password are invalid")
         }
     }else{
         throw new NotFound("you haven't access rights")
@@ -84,4 +84,19 @@ exports.changeBalance = async (id, userId, sum, type) => {
         throw new NotLogged("you haven't access rights")
     }
     return account
+}
+
+exports.deleteAccountByID = (id, userid) => {
+    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de supression RWCD)
+    rights="RWCD"
+    console.log("mes couilles en ski")
+    if(rights=="RWCD"){
+        return account.destroy({
+            where: {
+                id
+            }
+        })
+    }else{
+        throw new NotLogged("you haven't access rights")
+    }
 }

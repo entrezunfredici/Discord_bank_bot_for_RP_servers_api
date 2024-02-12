@@ -8,6 +8,9 @@ router.get('/Id=:Id', accountController.getAccountById);
 router.post('/login', accountController.accountLogin);
 //route pour ajouter un compte
 router.post('/add', accountController.addAccount);
+//route pour faire une transaction
 router.post('/transaction', accountController.accountBalance);
+//route pour supprimer un compte
+router.delete('/Id=:Id&userId=:userId', accountController.deleteAccountById)
 
 module.exports = router;

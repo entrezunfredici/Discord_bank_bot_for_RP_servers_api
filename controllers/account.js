@@ -60,3 +60,12 @@ exports.accountBalance = async (req, res, next) => {
         return next(createError(e.statusCode, e.message))
     }
 }
+
+exports.deleteAccountById = async (req, res, next) => {
+    try {
+        await accountService.deleteAccountByID(req.params.Id,req.params.userId)
+        res.status(204).send()
+    } catch(e) {
+        return next(createError(e.statusCode, e.message))
+    }
+}
