@@ -89,7 +89,6 @@ exports.changeBalance = async (id, userId, sum, type) => {
 exports.deleteAccountByID = (id, userid) => {
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de supression RWCD)
     rights="RWCD"
-    console.log("mes couilles en ski")
     if(rights=="RWCD"){
         return account.destroy({
             where: {
