@@ -61,6 +61,19 @@ exports.accountBalance = async (req, res, next) => {
     }
 }
 
+exports.quickTransaction = async(req, res, next) => {
+    const {id, cibleId, userId, sum} = req.body
+    try{
+        const exchange = await accountService.quickTransaction(id, cibleId, userId, sum)
+        if(exchange){
+            return res.status(200).json({success: true, exchange})
+        }
+        return res.status(400).json({success: false})
+    } catch(e) {
+        return next(createError(e.statusCode, e.message))
+    }
+}
+
 exports.deleteAccountById = async (req, res, next) => {
     try {
         await accountService.deleteAccountByID(req.params.Id,req.params.userId)

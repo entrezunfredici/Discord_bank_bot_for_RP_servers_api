@@ -61,7 +61,7 @@ exports.changeBalance = async (id, userId, sum, type) => {
     }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
     writeRights=true
-    if(writieRights){
+    if(writeRights){
         switch(type){
             case "withdrawal":
                 if(sum>account.balance){
@@ -81,6 +81,32 @@ exports.changeBalance = async (id, userId, sum, type) => {
             default:
                 throw new BadRequest("this transaction doesn't exist")
         }
+    }else{
+        throw new NotLogged("you haven't access rights")
+    }
+    return account
+}
+
+exports.quickTransaction = async (id, cibleId, userId, sum) => {
+    const account= await this.getAccountById(id)
+    const cibleAccount= await this.getAccountById(cibleId)
+    if(!account){
+        throw new NotFound("this account doesn't exist")
+    }
+    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
+    writeRights=true
+    if(writeRights){
+        if(sum>account.balance){
+            throw new BadRequest("you don't have enough money")
+        }
+        cibleSum = cibleAccount.balance+sum
+        cibleAccount.update({
+            balance: cibleSum
+        })
+        sum = account.balance-sum
+        account.update({
+            balance: sum
+        })
     }else{
         throw new NotLogged("you haven't access rights")
     }

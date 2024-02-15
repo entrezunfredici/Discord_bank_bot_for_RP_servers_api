@@ -10,7 +10,10 @@ router.post('/login', accountController.accountLogin);
 router.post('/add', accountController.addAccount);
 //route pour faire une transaction
 router.post('/transaction', accountController.accountBalance);
+//route pour faire une transaction directe
+router.post("/quickTransaction", accountController.quickTransaction);
 //route pour supprimer un compte
 router.delete('/Id=:Id&userId=:userId', accountController.deleteAccountById)
+
 
 module.exports = router;
