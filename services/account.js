@@ -1,5 +1,6 @@
 const { account } = require('../models')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
 exports.getAccountByBeneficiaryId = async (beneficiaryId) => {
