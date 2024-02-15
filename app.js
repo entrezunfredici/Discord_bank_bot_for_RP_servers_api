@@ -13,4 +13,9 @@ app.use(express.json())
     app.use('/<router>', yourRouter)
 */
 
+//router pour les comptes bacaaires
+const accountRouter = require('./routers/account')
+app.use('/account', accountRouter)
+
+
 module.exports = app

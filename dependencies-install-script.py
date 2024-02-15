@@ -7,7 +7,10 @@ commands= {
         "npm install sequelize",
         "npm install mysql2",
         "npm install sqlite3",
-        "npm install --save-dev jest supertest"
+        "npm install --save-dev jest supertest",
+        "npm install bcrypt",
+        "npm install http-errors",
+        "npm install jsonwebtoken"
         }
 for command in commands:
     print("execution de la commande ⇒  "+command)

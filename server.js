@@ -1,4 +1,4 @@
-const port = 8080;
+const port = 8000;
 const db = require('./models/index');
 const app = require('./app');
 // Start the server on the given port
