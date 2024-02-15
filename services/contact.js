@@ -1,7 +1,7 @@
-const { contact } = require('../../madels')
+const { contact } = require('../models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { NotFound, NotLogged, BadRequest, ServerError } = require('../../errors')
+const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
 
 exports.getContact = async () => {
@@ -16,7 +16,7 @@ exports.getContactByUsername = async (username) => {
     })
 }
 
-exports.addContact = async (username, password, role, account, partner) => {
+exports.addContact = async (username, password, role) => {
     const existingContact = await this.getContactByUsername(username)
     if (existingContact) {
         throw new BadRequest('Contact already exists')
@@ -35,13 +35,13 @@ exports.addContact = async (username, password, role, account, partner) => {
     //     throw new BadRequest('Need to have a role that already exist')
     // }
     return bcrypt.hash(password, 10).then((hash) => {
-        return contact.create({username, password: hash, role, account, partner})
+        return contact.create({username, password: hash, role})
     }).catch((e) => {
         throw new ServerError('Error when performing bcrypt: ', e.message)
     })
 }
 
-exports.contactlogin = async (username, password) => {
+exports.loginContact = async (username, password) => {
     const contact = await this.getContactByUsername(username)
     if (!contact) {
         throw new NotFound('No user found for username:' + username)
@@ -67,3 +67,8 @@ exports.contactlogin = async (username, password) => {
             }
         })
     }
+
+    //TODO: créer Update !
+    //TODO: créer rajouter condition (dans le controller je pense ) pour empécher création d'un contact sans username, password, ou role
+    //TODO: contact qui se créent en permanence en role "client" et non les autres ...
+    //TODO: delete qui ne fonctionne pas voir erreur ...

@@ -13,4 +13,7 @@ app.use(express.json())
     app.use('/<router>', yourRouter)
 */
 
+const contactRouter = require('./routers/contact')
+app.use('/contact', contactRouter)
+
 module.exports = app

@@ -31,18 +31,18 @@ tags:
     description: account access rights
 paths:
   #contacts
-  /contacts/login:
+  /contact/login:
     post:
       tags:
-        - contacts
-      summary: Login as user
+        - contact
+      summary: Login as contact
       requestBody:
         content:
           application/json:
             schema:
-              required: [name, password]
+              required: [username, password]
               properties:
-                name:
+                username:
                   type: string
                 password:
                   type: string
@@ -54,55 +54,59 @@ paths:
               schema:
                 $ref: "#/components/schemas/accountlist?"
         "404":
-          description: "User not found"
+          description: "Contact not found"
         "500":
           description: "Server ERROR"
 
-  /contacts/register:
+  /contact/register:
     post:
       tags:
-        - contacts
-      summary: Add new user
+        - contact
+      summary: Add new contact
       requestBody:
         content:
           application/json:
             schema:
-              required: [name, password, rôle]
+              required: [username, password, role]
               properties:
-                  name:
+                  username:
                     type: string
                   password:
                     type: string
-                  rôle:
+                  role:
                     type: string
+                  account_id:
+                    type: int []
                   partner_ids:
                     type: int []
       responses:
           "201":
             description: "OK"
 
-  /contacts/contact:{id}:
+  /contact/:{username}:
     get: 
       tags:
-        - contacts
-      summary: Get a user by ID 
-      operationId: getUserByID
+        - contact
+      summary: Get a contact by username
+      operationId: getContactByUsername
       parameters:
-        - name: id
+        - name: username
           in: path
           required: true
           schema:
             type: integer
       responses:
         "200":
-          description: user fteched successfully
+          description: user fetched successfully
         "404":
           description: "NotFound"
+          
+/contact/delete/:{id}:
     delete:
       tags:
-        - contacts
+        - contact
       summary: Delete contact by id
-      operation: delecteContactByID
+      operation: delecteContactById
       responses:
           "200":
             description: Contact deleted successfully
