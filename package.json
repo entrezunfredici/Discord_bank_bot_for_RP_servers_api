@@ -23,6 +23,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "express": "^4.18.2",
+    "express-openapi-validator": "^5.1.6",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",

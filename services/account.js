@@ -26,6 +26,9 @@ exports.addAccount = async (beneficiaryId, password, balance) => {
         if(!balance){
             balance=0
         }
+        if(password.length <= 10){
+            throw new BadRequest("password must be at least 10 characters long")
+        }
         return bcrypt.hash(password, 10).then((hash) => {
             return account.create({beneficiaryId, password: hash, balance})
         }).catch((e) => {
@@ -114,16 +117,29 @@ exports.quickTransaction = async (id, cibleId, userId, sum) => {
     return account
 }
 
-exports.deleteAccountByID = (id, userid) => {
+exports.deleteAccountByID = async (id, userid) => {
+    const verifAccount = await this.getAccountById(id)
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de supression D)
     deleteRights=true
     if(deleteRights){
-        return account.destroy({
-            where: {
-                id
-            }
-        })
+        if(verifAccount){
+            return account.destroy({
+                where: {
+                    id
+                }
+            })
+        }else{
+            throw new NotFound("this account doesn't exist")
+        }
     }else{
         throw new NotLogged("you haven't access rights")
     }
+}
+
+exports.deleteAccountsByBeneficiaryID = async (beneficiaryID) => {
+    return account.destroy({
+        where: {
+            beneficiaryID
+        }
+    })
 }

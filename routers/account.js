@@ -14,6 +14,7 @@ router.post('/transaction', accountController.accountBalance);
 router.post("/quickTransaction", accountController.quickTransaction);
 //route pour supprimer un compte
 router.delete('/Id=:Id&userId=:userId', accountController.deleteAccountById)
-
+//route pour supprimer un compte via l'id du bénéficiaire
+router.delete('/beneficiaryId=:beneficiaryId', accountController.deleteAccountsByBeneficiaryID)
 
 module.exports = router;
