@@ -26,6 +26,9 @@ exports.addAccount = async (beneficiaryId, password, balance) => {
         if(!balance){
             balance=0
         }
+        if(password.length <= 10){
+            throw new BadRequest("password must be at least 10 characters long")
+        }
         return bcrypt.hash(password, 10).then((hash) => {
             return account.create({beneficiaryId, password: hash, balance})
         }).catch((e) => {
