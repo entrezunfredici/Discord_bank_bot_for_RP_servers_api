@@ -12,7 +12,7 @@ tags:
     description: contains money of contacts
 
 paths:
-  #contacts
+  #accounts
   /accounts/{beneficiaryId}:
     get:
       summary: Récupérer les comptes par ID de bénéficiaire
@@ -82,6 +82,7 @@ paths:
           application/json:
             schema:
               type: object
+              required: [userId, id, password]
               properties:
                 userId:
                   type: integer
@@ -113,6 +114,7 @@ paths:
           application/json:
             schema:
               type: object
+              required: [beneficiaryId, password]
               properties:
                 beneficiaryId:
                   type: integer
@@ -144,6 +146,7 @@ paths:
           application/json:
             schema:
               type: object
+              required: [Id, userId, sum, type]
               properties:
                 id:
                   type: integer
@@ -177,6 +180,7 @@ paths:
           application/json:
             schema:
               type: object
+              required: [id, cibleId, userId, sum]
               properties:
                 id:
                   type: integer
@@ -209,12 +213,19 @@ components:
       properties:
         id:
           type: integer
+          example: 1
         beneficiaryId:
           type: integer
+          example: 1
+        password:
+          type: string
+          example: "AzEr5t6-!Tp6"
         balance:
           type: number
+          example: 1000
       required:
         - id
+        - password
         - beneficiaryId
         - balance
 
