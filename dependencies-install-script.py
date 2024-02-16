@@ -10,7 +10,8 @@ commands= {
         "npm install --save-dev jest supertest",
         "npm install bcrypt",
         "npm install http-errors",
-        "npm install jsonwebtoken"
+        "npm install jsonwebtoken",
+        "npm install express-openapi-validator"
         }
 for command in commands:
     print("execution de la commande ⇒  "+command)

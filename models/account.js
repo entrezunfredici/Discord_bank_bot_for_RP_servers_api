@@ -17,7 +17,7 @@ module.exports = (instance) => {
             allownull: false
         },
         balance: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.FLOAT,
             allownull: false
         },
     })

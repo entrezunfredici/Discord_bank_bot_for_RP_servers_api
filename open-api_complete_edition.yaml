@@ -1,0 +1,702 @@
+#open API
+openapi: 3.0.3
+info:
+  title: PICSOU BANK Bot
+  derciption: "this api manage one discord bank bot for RP servers in Discord"
+  vertion: "1.0.0"
+#server configuration
+server:
+  -url: '{protocol}://{server}'
+  variables:
+    protocol:
+      enum:
+        - http
+        - https
+      default: http
+    serveur:
+      defaults: localhost:8000
+#differents tags of this project
+tags:
+  - name: contacts
+    description: use accounts and transactions
+  - name: partners
+    decription: link two contacts 
+  - name: account
+    description: contains money of contacts
+  - name: exchanges
+    description: cash flows between accounts
+  - name: automaticCashWithDrawal
+    description: automatic transfers at regular intervals
+  - name: accountsRights
+    description: account access rights
+paths:
+  #contacts
+  /contacts/login:
+    post:
+      tags:
+        - contacts
+      summary: Login as user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [name, password]
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: "connect sucessfully"
+        "404":
+          description: "User not found"
+        "500":
+          description: "Server ERROR"
+
+  /contacts/register:
+    post:
+      tags:
+        - contacts
+      summary: Add new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [name, password, rôle]
+              properties:
+                  name:
+                    type: string
+                  password:
+                    type: string
+                  rôle:
+                    type: string
+                  partner_ids:
+                    type: int []
+      responses:
+          "201":
+            description: "OK"
+
+  /contacts/contact:{id}:
+    get: 
+      tags:
+        - contacts
+      summary: Get a user by ID 
+      operationId: getContactByID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: user fteched successfully
+        "404":
+          description: "NotFound"
+    delete:
+      tags:
+        - contacts
+      summary: Delete contact by id
+      operation: delecteContactByID
+      responses:
+          "200":
+            description: Contact deleted successfully
+          "404":
+            description: "NotFound"
+
+  #partners
+  /partner/add:
+    post:
+      tags:
+        - partners
+      summary: Add new partnership
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [contactID, contactPartnerID, contactRole, contactPartnerRole]
+              properties:
+                  contactID:
+                    type: int
+                  contactPartnerID:
+                    type: int
+                  contactRole:
+                    type: string
+                  contactPartnerRole:
+                    type: string 
+      responses:
+        "201":
+          description: "OK"
+
+  /partner/contact:{contactID}:
+    get: 
+      tags:
+        - partners
+      summary: Get a partnership by contactID 
+      operationId: getPartnerByContactID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: partnership fetched successfully
+        "404":
+          description: "NotFound"
+    delete:
+      tags:
+        - partners
+      summary: Delete partner by contactID
+      operation: delectePartnerByContactID
+      parameters:
+        - $ref: '#/components/parameters/IdInPath'
+      responses:
+          "200":
+            description: Partnership deleted successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  required: [ success ]
+                  properties:
+                    success:
+                      type: boolean
+                      example: true
+                      default: true
+          "404":
+            description: "NotFound"
+
+  /partner/contactPartner:{contactPartnerID}:
+    get: 
+      tags:
+        - partners
+      summary: Get a partnership by contactPartnerID 
+      operationId: getPartnerByContactPartnerID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: partnership fetched successfully
+        "404":
+          description: "NotFound"
+    delete:
+      tags:
+        - partners
+      summary: Delete partner by contact partner id
+      operationId: deletePartnerByContactPartnerId
+      parameters:
+        - $ref: '#/components/parameters/IdInPath'
+      responses:
+          "200":
+            description: Partnership deleted successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  required: [ success ]
+                  properties:
+                    success:
+                      type: boolean
+                      example: true
+                      default: true
+          "404":
+            description: "NotFound"
+
+  /partners/partner:{id}:
+    get: 
+      tags:
+        - partners
+      summary: Get a partnership by ID 
+      operationId: getPartnerByID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: partnership fetched successfully
+        "404":
+          description: "NotFound"
+    delete:
+      tags:
+        - partners
+      summary: Delete partner by id
+      operationId: deletePartnerById
+      parameters:
+        - $ref: '#/components/parameters/IdInPath'
+      responses:
+          "200":
+            description: Partnership deleted successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  required: [ success ]
+                  properties:
+                    success:
+                      type: boolean
+                      example: true
+                      default: true
+          "404":
+            description: "NotFound"
+
+  #accounts
+  /account/beneficiary:{beneficiary_id}:
+    get:
+      tags:
+        - account
+      summary: get accounts of one beneficiary
+      operationId: getAccountByBeneficiaryId
+      parameters:
+        - name: beneficiary_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: account fetched succesfully
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - account
+      summary: account deletion with beneficiary_id
+      operationId: deleteAccountsByBeneficiaryID
+      parameters:
+        - name: beneficiary_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: account deleted succesfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ success ]
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /account/Id:{id}:
+    get:
+      tags:
+        - account
+      summary: get account by id
+      operationId: getAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: account fetched succesfully
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+        - account
+      summary: account deletion with id
+      operationId: deleteAccountById
+      parameters:
+        - $ref : '#/components/parameters/idInPath'
+      responses:
+        "200":
+          description: account deleted succesfully
+          content:
+            application/json:
+              schema:
+                type: objects
+                required: [success]
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+        "400":
+          $ref: "#/components/responses/NotFound"
+
+  /account/login:
+    post:
+      tags:
+        - account
+      summary: Login to an account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [id, password]
+              properties:
+                id:
+                  type: int
+                password:
+                  type: string
+      responses:
+        "200":
+          description: "you are connected"
+        "404":
+          description: "invalid identifier"
+        "500":
+          description: "Server ERROR"
+
+  /account/add:
+    post:
+      tags:
+        - account
+      summary: create an account
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              required: [password, beneficiary_id]
+              properties:
+                password:
+                  type: string
+                beneficiary_id:
+                  type: integer
+                balance:
+                  type: float
+      responses:
+        "201":
+          description: "OK"
+
+  /account/transaction:
+    post:
+      tags:
+        - account
+      summary: Do one account transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [id, userId, sum, type]
+              properties:
+                yourid:
+                  type: int
+                userId:
+                  type: int
+                sum:
+                  type: float
+                type:
+                  type: string
+      responses:
+        "201":
+          description: "OK"
+        "404":
+          description: "invalid identifier"
+        "500":
+          description: "Server ERROR"
+
+  /account/quickTransaction:
+    post:
+      tags:
+        - account
+      summary: Do one account transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [id, cibleId, userId, sum]
+              properties:
+                yourid:
+                  type: int
+                cibleId:
+                  type: int
+                userId:
+                  type: int
+                sum:
+                  type: float
+      responses:
+        "201":
+          description: "OK"
+        "404":
+          description: "invalid identifier"
+        "500":
+          description: "Server ERROR"
+
+  #exchanges
+  /exchanges:
+    post:
+      tags:
+        - exchanges
+      summary: Do one account transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [yourid, yourpassword, cibleid, sum]
+              properties:
+                yourid:
+                  type: int
+                yourpassword:
+                  type: string
+                cibleid:
+                  type: int
+                sum:
+                  type: float
+      responses:
+        "201":
+          description: "OK"
+
+  #automaticCashWithDrawal
+  /automaticCashWithdrawal/add:
+    post:
+      tags:
+        - automaticCashWithDrawal
+      summary: automatic transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [youridentifier, yourpassword, cibleidentifier, sum, delay, delayUnit]
+              properties:
+                youridentifier:
+                  type: string
+                yourpassword:
+                  type: string
+                cibleidentifier:
+                  type: string
+                sum:
+                  type: float
+                delayUnit:
+                  type: int
+                timeUnit:
+                  type: string
+                enddate:
+                  type: string
+                  format: date
+      responses:
+        "201":
+          description: "OK"
+
+  #accountRights
+  /accountsRights/add:
+    post:
+      tags:
+        - accountRights
+      summary: access rights
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [userID, accountID, rights]
+              properties:
+                userID:
+                  type: int
+                accountID:
+                  type: int
+                rights:
+                  type: string
+      responses:
+        "201":
+          description: "OK"
+
+  /accountsRights/user:{userID}&account:{accountID}:
+    get:
+      tags:
+        - accountRights
+      summary: get account rights
+      operationId: getAccountRightsByUserIDAndAccountID
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: accountID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: rights fetched succesfully
+        "404":
+          description: rights not found
+    delete:
+      tags:
+        - accountRights
+      summary: delete rights
+      operationId: deleteAccountRightsByUserIDAndAccountID
+      parameters:
+        -$ref: "#/components/parameters/idInPath"
+      responses:
+        "200":
+          description: tights deleted succesfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ success ]
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    default: true
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+#components
+#components
+components:
+  parameters:
+    idInPath:
+      required: true
+      name: id
+      in: path
+      schema:
+        type: integer
+  schemas:
+    AccountList:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: true
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Accounts'
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1
+        identifier:
+          type: string
+          example: AE3B5E4C7EB3
+        password:
+          type: string
+          example: 354615
+        beneficiary_id:
+          type: string
+          example: 1
+        holder_ids:
+          type: string[]
+          example:
+          {
+            2,
+            4,
+            12,
+            56
+          }
+        sold:
+          type: string
+          example: 15 563
+        exchange_ids:
+          type: string[]
+          example:
+          {
+            8,
+            4,
+            10,
+            45
+          }
+        automaticCashWithdrawal_ids:
+          type: string[]
+          example:
+          {
+            8,
+            14
+          }
+  requestBodies:
+    accountCreation:
+      required: true
+      decription: bank account thaat need to be created
+      content:
+        application/json:
+          schema:
+            required: [identifier, password, beneficiary_id]
+            allof:
+              - $ref: '#/components/schemas/Account'
+  responses:
+    RessourceCreated:
+      description: "The ressource has been created"
+      content:
+        application/json:
+          schema:
+            type: objects
+            required: [ success, id ]
+            properties:
+              success:
+                type: boolean
+                default: true
+                example: true
+              id:
+                type: integer
+                example: 1
+                description: "The id of the ressource created"
+    NotFound:
+      description: "The resource specified is not found"
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ success, message ]
+            properties:
+              success:
+                type: boolean
+                default: false
+                example: false
+              message:
+                type: string
+                default: ""
+                example: "This ressource with this id is not found"
+    InvalidBody:
+      description: "The body sent to the request is invalid"
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ success, message ]
+            properties:
+              success:
+                type: boolean
+                default: false
+                example: false
+              message:
+                type: string
+                default: ""
+                example: "Please make sure that all args on the body are ok"
+    InternalServerError:
+      description: "An internal server error occurred"
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ success, message ]
+            properties:
+              success:
+                type: boolean
+                default: false
+                example: false
+              message:
+                type: string
+                default: "An unknown server error occurred"
+                example: "An unknown server error occurred"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Set your JWT token

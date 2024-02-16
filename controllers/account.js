@@ -1,14 +1,34 @@
+const jwt = require('jsonwebtoken');
 const accountService = require('../services/account')
 const createError = require('http-errors');
 const { ServerError } = require('../errors');
 
+exports.accountMiddleware = async (req, res, next) => {
+
+    if (req.headers && !req.headers.authorization) {
+        res.status(401).json({success: false, message: 'You need to be authenticated'});
+    } else {
+        const token = req.headers.authorization.split(' ')[1];
+        try {
+            const decodedToken = await jwt.verify(token, process.env.SECRET);
+            if (decodedToken) {
+                // We can store in req.locals = {} some info about the user to propagate into next controller
+                next();
+            } else {
+                next(createError(401, 'Authentication is no more valid'))
+            }
+        } catch(e) {
+            next(e);
+        }
+    }
+}
 
 exports.getAccountByBeneficiaryId = async (req, res, next)  => {
     const account = await accountService.getAccountByBeneficiaryId(req.params.beneficiaryId)
     if(account!=0){
         res.json({success: true, data: account})
     }else{
-        res.status(404).json("this beneficiary haven't bank account")
+        next(createError(404, "this beneficiary haven't bank account"))
     }
 }
 
@@ -17,7 +37,7 @@ exports.getAccountById = async (req, res, next)  => {
     if(account){
         res.json({success: true, data: account})
     }else{
-        res.status(404).json("this bank account doesn't exist")
+        next(createError(404, "this bank account doesn't exist"))
     }
 }
 
@@ -77,6 +97,15 @@ exports.quickTransaction = async(req, res, next) => {
 exports.deleteAccountById = async (req, res, next) => {
     try {
         await accountService.deleteAccountByID(req.params.Id,req.params.userId)
+        res.status(200).send({success: true})
+    } catch(e) {
+        return next(createError(e.statusCode, e.message))
+    }
+}
+
+exports.deleteAccountsByBeneficiaryID = async (req, res, next) => {
+    try {
+        await accountService.deleteAccountsByBeneficiaryID(req.params.beneficiaryId)
         res.status(200).send({success: true})
     } catch(e) {
         return next(createError(e.statusCode, e.message))
