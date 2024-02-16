@@ -50,12 +50,6 @@ exports.accountLogin = async (userId, id, password) => {
             throw new NotLogged('password incorrect for username')
         }
         return account
-        // const token = jwt.sign({
-        //     data: {id: user.id, username: user.username}
-        // }, process.env.SECRET, {
-        //     expiresIn: '300s'
-        // })
-        // return token
     }else{
         throw new NotFound("you haven't access rights")
     }
@@ -125,11 +119,6 @@ exports.deleteAccountByID = async (id, userid) => {
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de supression D)
     deleteRights=true
     if(deleteRights){
-        // return account.destroy({
-        //     where: {
-        //         id
-        //     }
-        // })
         if(verifAccount){
             return account.destroy({
                 where: {
@@ -150,14 +139,4 @@ exports.deleteAccountsByBeneficiaryID = async (beneficiaryID) => {
             beneficiaryID
         }
     })
-    // verifBeneficiary= await this.getAccountByBeneficiaryId(beneficiaryID)
-    // if(verifBeneficiary){
-    //     return account.destroy({
-    //         where: {
-    //             beneficiaryID
-    //         }
-    //     })
-    // }else{
-    //     throw new NotFound("this account doesn't exist")
-    // }
 }

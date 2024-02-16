@@ -2,277 +2,211 @@
 openapi: 3.0.3
 info:
   title: PICSOU BANK Bot
-  derciption: "this api manage one discord bank bot for RP servers in Discord"
-  vertion: "1.0.0"
+  description: "this api manage one discord bank bot for RP servers in Discord"
+  version: "1.0.0"
 #server configuration
-server:
-  -url: '{protocol}://{server}'
-  variables:
-    protocol:
-      enum:
-        - http
-        - https
-      default: http
-    serveur:
-      defaults: localhost:8000
-#differents tags of this project
-tags:
-  - name: account
-    description: contains money of contacts
 paths:
-  #accounts
-  # /account/beneficiary:{beneficiary_id}:
-  #   get:
-  #     tags:
-  #       - account
-  #     summary: get accounts of one beneficiary
-  #     operationId: getAccountByBeneficiaryId
-  #     parameters:
-  #       - name: beneficiary_id
-  #         in: path
-  #         required: true
-  #         schema:
-  #           type: integer
-  #     responses:
-  #       "200":
-  #         description: account fetched succesfully
-  #       "404":
-  #         $ref: "#/components/responses/NotFound"
-  #   delete:
-  #     tags:
-  #       - account
-  #     summary: account deletion with beneficiary_id
-  #     operationId: deleteAccountsByBeneficiaryID
-  #     parameters:
-  #       - name: beneficiary_id
-  #         in: path
-  #         required: true
-  #         schema:
-  #           type: integer
-  #     responses:
-  #       "200":
-  #         description: account deleted succesfully
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               required: [ success ]
-  #               properties:
-  #                 success:
-  #                   type: boolean
-  #                   example: true
-  #                   default: true
-  #       "404":
-  #         $ref: "#/components/responses/NotFound"
+  /accounts/{beneficiaryId}:
+    get:
+      summary: Récupérer les comptes par ID de bénéficiaire
+      parameters:
+        - name: beneficiaryId
+          in: path
+          description: ID du bénéficiaire
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+    delete:
+      summary: Supprimer les comptes par ID de bénéficiaire
+      parameters:
+        - name: beneficiaryId
+          in: path
+          description: ID du bénéficiaire
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Succès
 
-  # /account/Id:{id}:
-  #   get:
-  #     tags:
-  #       - account
-  #     summary: get account by id
-  #     operationId: getAccountById
-  #     parameters:
-  #       - name: id
-  #         in: path
-  #         required: true
-  #         schema:
-  #           type: integer
-  #     responses:
-  #       "200":
-  #         description: account fetched succesfully
-  #       "404":
-  #         $ref: "#/components/responses/NotFound"
-  #   delete:
-  #     tags:
-  #       - account
-  #     summary: account deletion with id
-  #     operationId: deleteAccountById
-  #     parameters:
-  #       - $ref : '#/components/parameters/idInPath'
-  #     responses:
-  #       "200":
-  #         description: account deleted succesfully
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: objects
-  #               required: [success]
-  #               properties:
-  #                 success:
-  #                   type: boolean
-  #                   example: true
-  #                   default: true
-  #       "400":
-  #         $ref: "#/components/responses/NotFound"
+  /accounts/{id}:
+    get:
+      summary: Récupérer un compte par ID
+      parameters:
+        - name: id
+          in: path
+          description: ID du compte
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+    delete:
+      summary: Supprimer un compte par ID
+      parameters:
+        - name: id
+          in: path
+          description: ID du compte
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Succès
 
-  /account/login:
+  /accounts/login:
     post:
-      tags:
-        - account
-      summary: Login to an account
+      summary: Se connecter à un compte
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              required: [id, password]
+              type: object
+              properties:
+                userId:
+                  type: integer
+                id:
+                  type: integer
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  token:
+                    type: string
+        '400':
+          description: Identifiant ou mot de passe incorrect
+
+  /accounts/add:
+    post:
+      summary: Ajouter un compte
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                beneficiaryId:
+                  type: integer
+                password:
+                  type: string
+                balance:
+                  type: number
+      responses:
+        '201':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  account:
+                    $ref: '#/components/schemas/Account'
+        '500':
+          description: Erreur serveur
+
+  /accounts/transaction:
+    post:
+      summary: Effectuer une transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
               properties:
                 id:
-                  type: int
-                password:
+                  type: integer
+                userId:
+                  type: integer
+                sum:
+                  type: number
+                type:
                   type: string
       responses:
-        "200":
-          description: "you are connected"
-        "404":
-          description: "invalid identifier"
-        "500":
-          description: "Server ERROR"
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  change:
+                    $ref: '#/components/schemas/Account'
+        '400':
+          description: Mauvaise requête
 
-  /account/add:
+  /accounts/quickTransaction:
     post:
-      tags:
-        - account
-      summary: create an account
-      requestBody: 
+      summary: Effectuer une transaction rapide
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
-              required: [password, beneficiary_id]
+              type: object
               properties:
-                password:
-                  type: string
-                beneficiary_id:
+                id:
                   type: integer
-                balance:
-                  type: float
+                cibleId:
+                  type: integer
+                userId:
+                  type: integer
+                sum:
+                  type: number
       responses:
-        "201":
-          description: "OK"
-
-  # /account/transaction:
-  #   post:
-  #     tags:
-  #       - account
-  #     summary: Do one account transactions
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             required: [id, userId, sum, type]
-  #             properties:
-  #               yourid:
-  #                 type: int
-  #               userId:
-  #                 type: int
-  #               sum:
-  #                 type: float
-  #               type:
-  #                 type: string
-  #     responses:
-  #       "201":
-  #         description: "OK"
-  #       "404":
-  #         description: "invalid identifier"
-  #       "500":
-  #         description: "Server ERROR"
-
-  # /account/quickTransaction:
-  #   post:
-  #     tags:
-  #       - account
-  #     summary: Do one account transactions
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             required: [id, cibleId, userId, sum]
-  #             properties:
-  #               yourid:
-  #                 type: int
-  #               cibleId:
-  #                 type: int
-  #               userId:
-  #                 type: int
-  #               sum:
-  #                 type: float
-  #     responses:
-  #       "201":
-  #         description: "OK"
-  #       "404":
-  #         description: "invalid identifier"
-  #       "500":
-  #         description: "Server ERROR"
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  exchange:
+                    $ref: '#/components/schemas/Account'
+        '400':
+          description: Mauvaise requête
 
 components:
-  parameters:
-    idInPath:
-      required: true
-      name: id
-      in: path
-      schema:
-        type: integer
-  responses:
-    ResourceCreated:
-      description: "The resource has been created"
-      content:
-        application/json:
-          schema:
-            type: object
-            required : [ success, id ]
-            properties:
-              success:
-                type: boolean
-                default: true
-                example: true
-              id:
-                type: integer
-                example: 1
-                description: "The id of the ressource created"
-    NotFound:
-      description: "The resource specified is not found"
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [ success, message ]
-            properties:
-              success:
-                type: boolean
-                default: false
-                example: false
-              message:
-                type: string
-                default: ""
-                example: "This ressource with this id is not found"
-    InvalidBody:
-      description: "The body sent to the request is invalid"
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [ success, message ]
-            properties:
-              success:
-                type: boolean
-                default: false
-                example: false
-              message:
-                type: string
-                default: ""
-                example: "Please make sure that all args on the body are ok"
-    InternalServerError:
-      description: "An internal server error occurred"
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [ success, message ]
-            properties:
-              success:
-                type: boolean
-                default: false
-                example: false
-              message:
-                type: string
-                default: "An unknown server error occurred"
-                example: "An unknown server error occurred"
+  schemas:
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        beneficiaryId:
+          type: integer
+        balance:
+          type: number
+      required:
+        - id
+        - beneficiaryId
+        - balance
+
