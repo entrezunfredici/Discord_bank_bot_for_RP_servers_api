@@ -5,7 +5,14 @@ info:
   description: "this api manage one discord bank bot for RP servers in Discord"
   version: "1.0.0"
 #server configuration
+
+#tags
+tags:
+  - name: account
+    description: contains money of contacts
+
 paths:
+  #contacts
   /accounts/{beneficiaryId}:
     get:
       summary: Récupérer les comptes par ID de bénéficiaire
@@ -194,6 +201,7 @@ paths:
         '400':
           description: Mauvaise requête
 
+#components
 components:
   schemas:
     Account:
