@@ -8,6 +8,8 @@ info:
 
 #tags
 tags:
+  - name: contacts
+    description: use accounts and transactions
   - name: account
     description: contains money of contacts
 
@@ -31,10 +33,6 @@ paths:
       responses:
         "200":
           description: "connect sucessfully"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/accountlist?"
         "404":
           description: "Contact not found"
         "500":
@@ -57,10 +55,6 @@ paths:
                     type: string
                   role:
                     type: string
-                  account_id:
-                    type: int []
-                  partner_ids:
-                    type: int []
       responses:
           "201":
             description: "OK"
@@ -83,8 +77,8 @@ paths:
           description: user fetched successfully
         "404":
           description: "NotFound"
-          
-/contact/delete/:{id}:
+
+  /contact/delete/:{id}:
     delete:
       tags:
         - contact
@@ -197,7 +191,7 @@ paths:
       responses:
         '200':
           description: Succès
-  
+
   /accounts/login:
     post:
       summary: Se connecter à un compte
@@ -329,6 +323,7 @@ paths:
                     $ref: '#/components/schemas/Account'
         '400':
           description: Mauvaise requête
+
 #components
 components:
   schemas:
