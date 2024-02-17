@@ -58,7 +58,7 @@ exports.loginContact = async (username, password) => {
             expiresIn: '30s'
         })
     return token
-    }
+}
 
     exports.deleteContactById = (id) => {
         return contact.destroy({

@@ -13,7 +13,7 @@ exports.getContactByUsername = async (req, res, next) => {
     if (contact) {
         res.json({success: true, data: contact})
     } else {
-        res.status(404).json("This bank account doesn't exist")
+        res.status(404).json("This contact doesn't exist")
     }
 }
 

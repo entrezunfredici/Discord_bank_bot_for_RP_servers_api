@@ -8,13 +8,32 @@ info:
 
 #tags
 tags:
-  - name: contacts
+  - name: contact
     description: use accounts and transactions
   - name: account
     description: contains money of contacts
 
 paths:
-  #contacts
+  #contact
+  /contact:
+    get:
+      tags:
+        - contact
+      summary: Get all contacts
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        "404":
+          description: "NotFound"
+        "500":
+          description: "Server ERROR"
+
   /contact/login:
     post:
       tags:
@@ -59,77 +78,40 @@ paths:
           "201":
             description: "OK"
 
-  /contact/:{username}:
-    get: 
-      tags:
-        - contact
-      summary: Get a contact by username
-      operationId: getContactByUsername
-      parameters:
-        - name: username
-          in: path
-          description: ID du bénéficiaire
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: user fetched successfully
-        "404":
-          description: "NotFound"
+  # /contact/{username}:
+  #   get: 
+  #     tags:
+  #       - contact
+  #     summary: Get a contact by username
+  #     operationId: getContactByUsername
+  #     parameters:
+  #       - name: username
+  #         in: path
+  #         description: nom du contact
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: Succès
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Contact'
+  #       "404":
+  #         description: "NotFound"
 
-  /contact/delete/:{id}:
-    delete:
-      tags:
-        - contact
-      summary: Delete contact by id
-      operation: delecteContactById
-      responses:
-          "200":
-            description: Contact deleted successfully
-          "404":
-            description: "NotFound"
-
-  #partners
-  /partner/add:
-    post:
-      tags:
-        - partners
-      summary: Add new partnership
-      requestBody:
-        content:
-          application/json:
-            schema:
-              required: [contactID, contactPartnerID, contactRole, contactPartnerRole]
-              properties:
-                  contactID:
-                    type: int
-                  contactPartnerID:
-                    type: int
-                  contactRole:
-                    type: string
-                  contactPartnerRole:
-                    type: string 
-      responses:
-        "201":
-          description: "OK"
-
-  /partner/contact:{contactID}:
-    get: 
-      tags:
-        - partners
-      summary: Get a partnership by contactID 
-      operationId: getPartnerByContactID
-      parameters:
-        - name: beneficiaryId
-          in: path
-          description: ID du bénéficiaire
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Succès
+  # /contact/delete/{id}:
+  #   delete:
+  #     tags:
+  #       - contact
+  #     summary: Delete contact by id
+  #     operation: deleteContactById
+  #     responses:
+  #         "200":
+  #           description: Contact deleted successfully
+  #         "404":
+  #           description: NotFound
 
 #accounts
   /accounts/{beneficiaryId}:
@@ -327,6 +309,26 @@ paths:
 #components
 components:
   schemas:
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "Picsou"
+        password:
+          type: string
+          example: "AzEr5t6-!Tp6"
+        role:
+          type: string
+          example: "client"
+      required:
+        - id
+        - username
+        - password
+        - role
     Account:
       type: object
       properties:
