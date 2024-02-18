@@ -10,5 +10,6 @@ module.exports = {
     instance,
     /*to add an model type:
     model: require('./model')(instance)*/
-    account: require('./account')(instance)
+    account: require('./account')(instance),
+    regularMoneyExchanges: require('./regularMoneyExchanges')(instance)
 }

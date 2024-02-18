@@ -25,7 +25,7 @@ tags:
     description: contains money of contacts
   - name: exchanges
     description: cash flows between accounts
-  - name: automaticCashWithDrawal
+  - name: regularMoneyExchanges
     description: automatic transfers at regular intervals
   - name: accountsRights
     description: account access rights
@@ -466,11 +466,11 @@ paths:
         "201":
           description: "OK"
 
-  #automaticCashWithDrawal
-  /automaticCashWithdrawal/add:
+  #regularMoneyExchanges
+  /regularMoneyExchanges/add:
     post:
       tags:
-        - automaticCashWithDrawal
+        - regularMoneyExchanges
       summary: automatic transactions
       requestBody:
         content:
