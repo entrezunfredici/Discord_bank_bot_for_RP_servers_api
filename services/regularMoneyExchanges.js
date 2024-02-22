@@ -17,6 +17,14 @@ exports.getRegularMoneyExchangesBySenderId = async (senderId) => {
     })
 }
 
+exports.getRegularMoneyExchangesByReceiverId = async (receiverId) => {
+    return regularMoneyExchanges.findAll({
+        where: {
+            receiverId
+        }
+    })
+}
+
 exports.addRegularMoneyExchange = async (senderId, receiverId, amount, startDate, timeRange) => {
     if ((!amount) || (!startDate) || (!timeRange)) {
         throw new BadRequest("amount, startDate and timeRanges are required")

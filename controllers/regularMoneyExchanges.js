@@ -20,6 +20,15 @@ exports.getRegularMoneyExchangesBySenderId = async (req, res, next) => {
     }
 }
 
+exports.getRegularMoneyExchangesByReceiverId = async (req, res, next) => {
+    const regularMoneyExchange = await regularMoneyExchangeService.getRegularMoneyExchangesByReceiverId(req.params.receiverId)
+    if(regularMoneyExchange.length>0){
+        res.json({success: true, data: regularMoneyExchange})
+    }else{
+        next(createError(404, "there are no payments"))
+    }
+}
+
 exports.addRegularMoneyExchange = async (req,res,next) => {
     const {senderId, receiverID, amount, startDate, timeRanges} = req.body
     try {
