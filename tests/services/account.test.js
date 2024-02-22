@@ -1,7 +1,6 @@
 const accountService = require('../../services/account')
 const db = require('../../models')
 const bcrypt = require('bcrypt')
-const { DESCRIBE } = require('sequelize/types/query-types')
 require('dotenv').config()
 
 jest.mock('../../models')   // Mocking the models
