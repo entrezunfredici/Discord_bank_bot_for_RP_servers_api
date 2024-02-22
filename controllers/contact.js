@@ -62,10 +62,10 @@ exports.loginContact = async (req, res, next) => {
     }
 }
 
-exports.deleteContactById = async (req, res, next) => {
+exports.deleteContactByUsername = async (req, res, next) => {
     try {
-        await contactService.deleteContactById(req.params.Id)
-        res.status(204).send()
+        await contactService.deleteContactByUsername(req.params.username)
+        res.status(204).send({success: true})
     } catch(e) {
         return next(createError(e.statusCode, e.message))
     }

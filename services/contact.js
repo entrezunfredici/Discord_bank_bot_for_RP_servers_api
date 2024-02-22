@@ -1,4 +1,5 @@
 const { contact } = require('../models')
+const accountService = require('./account')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
@@ -30,6 +31,7 @@ exports.addContact = async (username, password, role) => {
     if(password.length <= 10){
         throw new BadRequest("Password must be at least 10 characters long")
     }
+    accountService.addAccount(username, password, 10) 
     return bcrypt.hash(password, 10).then((hash) => {
         return contact.create({username, password: hash, role})
     }).catch((e) => {
@@ -61,14 +63,20 @@ exports.loginContact = async (username, password) => {
 //     if 
 // }
 
-exports.deleteContactById = (id) => {
-    return contact.destroy({
-        where: {
-            id
-        }
-    })
+exports.deleteContactByUsername = async (username) => {
+    const verifContact = await this.getContactByUsername(username)
+    if (verifContact) {
+        return contact.destroy({
+            where: {
+                username
+            }
+        })
+    }else{
+        throw new NotFound("This account doesn't exist")
+    }
 }
 
-    //TODO: créer Update !
-    //TODO: créer rajouter condition (dans le controller je pense ) pour empécher création d'un contact sans username, password, ou role.
-    //TODO: delete qui ne fonctionne pas voir erreur ...
+
+
+    //TODO: créer Update plus tard !
+    //TODO: Rigths

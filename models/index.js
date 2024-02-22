@@ -14,4 +14,4 @@ module.exports = {
     contact: require('./contact')(instance)
 }
 
-instance.models.account.belongsTo(instance.models.contact)
+//instance.models.account.belongsTo(instance.models.contact)
