@@ -18,10 +18,10 @@ module.exports = (instance) => {
         },
         amount: {
             type: DataTypes.FLOAT,
-            allowNull: false
+            allownull: false
         },
         startDate: {
-            type: DataTypes.STRING,
+            type: DataTypes.DATE,
             allowNull: false
         },
         timeRange: {

@@ -30,9 +30,10 @@ exports.getRegularMoneyExchangesByReceiverId = async (req, res, next) => {
 }
 
 exports.addRegularMoneyExchange = async (req,res,next) => {
-    const {senderId, receiverID, amount, startDate, timeRanges} = req.body
+    const {senderId, receiverId, amount, startDate, timeRanges} = req.body
+    //startDate = new Date(startDate)
     try {
-        const regularMoneyExchange = await regularMoneyExchangeService.addRegularMoneyExchange(senderId, receiverID, amount, startDate, timeRanges)
+        const regularMoneyExchange = await regularMoneyExchangeService.addRegularMoneyExchange(senderId, receiverId, amount, startDate, timeRanges)
         if(!regularMoneyExchange){
             throw new ServerError('cannot create this regular money exchange')
         }
