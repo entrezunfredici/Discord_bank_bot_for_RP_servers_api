@@ -117,7 +117,7 @@ exports.quickTransaction = async (id, cibleId, userId, sum) => {
     return account
 }
 
-exports.deleteAccountByID = async (id, userid) => {
+exports.deleteAccountById= async (id, userid) => {
     const verifAccount = await this.getAccountById(id)
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de supression D)
     deleteRights=true
@@ -136,7 +136,7 @@ exports.deleteAccountByID = async (id, userid) => {
     }
 }
 
-exports.deleteAccountsByBeneficiaryID = async (beneficiaryID) => {
+exports.deleteAccountsByBeneficiaryId = async (beneficiaryID) => {
     return account.destroy({
         where: {
             beneficiaryID

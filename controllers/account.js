@@ -96,7 +96,7 @@ exports.quickTransaction = async(req, res, next) => {
 
 exports.deleteAccountById = async (req, res, next) => {
     try {
-        await accountService.deleteAccountByID(req.params.Id,req.params.userId)
+        await accountService.deleteAccountById(req.params.Id,req.params.userId)
         res.status(200).send({success: true})
     } catch(e) {
         return next(createError(e.statusCode, e.message))
@@ -105,7 +105,7 @@ exports.deleteAccountById = async (req, res, next) => {
 
 exports.deleteAccountsByBeneficiaryID = async (req, res, next) => {
     try {
-        await accountService.deleteAccountsByBeneficiaryID(req.params.beneficiaryId)
+        await accountService.deleteAccountsByBeneficiaryId(req.params.beneficiaryId)
         res.status(200).send({success: true})
     } catch(e) {
         return next(createError(e.statusCode, e.message))

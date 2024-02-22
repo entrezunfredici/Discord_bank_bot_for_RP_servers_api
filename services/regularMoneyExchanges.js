@@ -1,4 +1,5 @@
 const { regularMoneyExchanges } = require('../models')
+const accountService = require('./account')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
 exports.getRegularMoneyExchangesById = async (id) => {
@@ -25,10 +26,11 @@ exports.getRegularMoneyExchangesByReceiverId = async (receiverId) => {
     })
 }
 
-exports.addRegularMoneyExchange = async (senderId, receiverId, amount, startDate, timeRange) => {
+exports.addRegularMoneyExchange = async (senderId, receiverId, userId, amount, startDate, timeRange) => {
     if ((!amount) || (!startDate) || (!timeRange)) {
         throw new BadRequest("amount, startDate and timeRanges are required")
     }
+    accountService.quickTransaction(senderId, receiverId, userId, amount)
     return regularMoneyExchanges.create({ senderId, receiverId, amount, startDate, timeRange })
 }
 

@@ -13,5 +13,3 @@ module.exports = {
     account: require('./account')(instance),
     regularMoneyExchanges: require('./regularMoneyExchanges')(instance)
 }
-
-instance.models.regularMoneyExchanges.belongsTo(instance.models.account)
