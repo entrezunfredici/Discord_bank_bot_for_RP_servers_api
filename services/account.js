@@ -1,5 +1,6 @@
 const { account } = require('../models')
 const bcrypt = require('bcrypt')
+const contactService = require('./contact')
 const jwt = require('jsonwebtoken')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
@@ -17,6 +18,11 @@ exports.getAccountById = async (id) => {
             id
         }
     })
+}
+
+exports.addAccountWithUserName = async (userName, password, balance) => {
+    beneficiaryId=contactService.getContactId(userName)
+    addAccount(beneficiaryId, password, balance)
 }
 
 exports.addAccount = async (beneficiaryId, password, balance) => {
