@@ -1,24 +1,30 @@
 const { DataTypes } = require('sequelize')
 
 module.exports = (instance) => {
-    return instance.define('account', {
+    return instance.define('contact', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-            allowNull: false,
+            allowNull: false
         },
-        beneficiaryName: {
+        username: {
             type: DataTypes.STRING,
             allowNull: false
         },
         password: {
             type: DataTypes.STRING,
-            allownull: false
+            allowNull: false
         },
-        balance: {
-            type: DataTypes.FLOAT,
-            allownull: false
+        role: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
+        account: {
+            type: DataTypes.INTEGER,
+        },
+        partner: {
+            type: DataTypes.INTEGER,
+        }
     })
 }

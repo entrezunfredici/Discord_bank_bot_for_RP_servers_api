@@ -1,7 +1,7 @@
 const router = require('express').Router(), 
 accountController = require('../controllers/account')
 //route pour obtennir un compte via l'id du bénéficiaire
-router.get('/beneficiaryId=:beneficiaryId', accountController.getAccountByBeneficiaryId);
+router.get('/beneficiaryName=:beneficiaryName', accountController.getAccountBybeneficiaryName);
 //route pour obtennir un compte via l'id du compte
 router.get('/Id=:Id', accountController.getAccountById);
 //route pour se connecter
@@ -15,6 +15,6 @@ router.post("/quickTransaction", accountController.quickTransaction);
 //route pour supprimer un compte
 router.delete('/Id=:Id&userId=:userId', accountController.deleteAccountById)
 //route pour supprimer un compte via l'id du bénéficiaire
-router.delete('/beneficiaryId=:beneficiaryId', accountController.deleteAccountsByBeneficiaryID)
+router.delete('/beneficiaryName=:beneficiaryName', accountController.deleteAccountsBybeneficiaryName)
 
 module.exports = router;
