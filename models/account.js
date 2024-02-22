@@ -8,8 +8,8 @@ module.exports = (instance) => {
             primaryKey: true,
             allowNull: false,
         },
-        beneficiaryId: {
-            type: DataTypes.INTEGER,
+        beneficiaryName: {
+            type: DataTypes.STRING,
             allowNull: false
         },
         password: {
