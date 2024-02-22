@@ -120,10 +120,10 @@ paths:
       parameters:
         - name: beneficiaryName
           in: path
-          description: ID du bénéficiaire
+          description: nom du bénéficiaire
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: Succès
@@ -136,10 +136,10 @@ paths:
       parameters:
         - name: beneficiaryName
           in: path
-          description: ID du bénéficiaire
+          description: nom du bénéficiaire
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: Succès
@@ -218,7 +218,7 @@ paths:
               required: [beneficiaryName, password]
               properties:
                 beneficiaryName:
-                  type: integer
+                  type: string
                 password:
                   type: string
                 balance:
@@ -336,7 +336,7 @@ components:
           type: integer
           example: 1
         beneficiaryName:
-          type: integer
+          type: string
           example: 1
         password:
           type: string
