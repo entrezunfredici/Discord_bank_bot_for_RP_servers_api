@@ -8,21 +8,122 @@ info:
 
 #tags
 tags:
+  - name: contact
+    description: use accounts and transactions
   - name: account
     description: contains money of contacts
 
 paths:
-  #accounts
-  /accounts/{beneficiaryId}:
+  #contact
+  /contact:
+    get:
+      tags:
+        - contact
+      summary: Get all contacts
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        "404":
+          description: "NotFound"
+        "500":
+          description: "Server ERROR"
+
+  /contact/login:
+    post:
+      tags:
+        - contact
+      summary: Login as contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: "connect sucessfully"
+        "404":
+          description: "Contact not found"
+        "500":
+          description: "Server ERROR"
+
+  /contact/register:
+    post:
+      tags:
+        - contact
+      summary: Add new contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [username, password, role]
+              properties:
+                  username:
+                    type: string
+                  password:
+                    type: string
+                  role:
+                    type: string
+      responses:
+          "201":
+            description: "OK"
+
+  # /contact/{username}:
+  #   get: 
+  #     tags:
+  #       - contact
+  #     summary: Get a contact by username
+  #     operationId: getContactByUsername
+  #     parameters:
+  #       - name: username
+  #         in: path
+  #         description: nom du contact
+  #         required: true
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: Succès
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Contact'
+  #       "404":
+  #         description: "NotFound"
+
+  # /contact/delete/{id}:
+  #   delete:
+  #     tags:
+  #       - contact
+  #     summary: Delete contact by id
+  #     operation: deleteContactById
+  #     responses:
+  #         "200":
+  #           description: Contact deleted successfully
+  #         "404":
+  #           description: NotFound
+
+#accounts
+  /accounts/{beneficiaryName}:
     get:
       summary: Récupérer les comptes par ID de bénéficiaire
       parameters:
-        - name: beneficiaryId
+        - name: beneficiaryName
           in: path
-          description: ID du bénéficiaire
+          description: nom du bénéficiaire
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: Succès
@@ -33,12 +134,12 @@ paths:
     delete:
       summary: Supprimer les comptes par ID de bénéficiaire
       parameters:
-        - name: beneficiaryId
+        - name: beneficiaryName
           in: path
-          description: ID du bénéficiaire
+          description: nom du bénéficiaire
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: Succès
@@ -114,10 +215,10 @@ paths:
           application/json:
             schema:
               type: object
-              required: [beneficiaryId, password]
+              required: [beneficiaryName, password]
               properties:
-                beneficiaryId:
-                  type: integer
+                beneficiaryName:
+                  type: string
                 password:
                   type: string
                 balance:
@@ -208,14 +309,34 @@ paths:
 #components
 components:
   schemas:
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "Picsou"
+        password:
+          type: string
+          example: "AzEr5t6-!Tp6"
+        role:
+          type: string
+          example: "client"
+      required:
+        - id
+        - username
+        - password
+        - role
     Account:
       type: object
       properties:
         id:
           type: integer
           example: 1
-        beneficiaryId:
-          type: integer
+        beneficiaryName:
+          type: string
           example: 1
         password:
           type: string
@@ -226,6 +347,6 @@ components:
       required:
         - id
         - password
-        - beneficiaryId
+        - beneficiaryName
         - balance
 

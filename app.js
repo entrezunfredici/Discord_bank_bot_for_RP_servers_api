@@ -23,9 +23,11 @@ app.use(
     app.use('/<router>', yourRouter)
 */
 
-//router pour les comptes bacaaires
+//router pour les comptes bancaires
 const accountRouter = require('./routers/account')
 app.use('/account', accountRouter)
-
+//router pour les contacts
+const contactRouter = require('./routers/contact')
+app.use('/contact', contactRouter)
 
 module.exports = app

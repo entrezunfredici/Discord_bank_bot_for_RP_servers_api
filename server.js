@@ -3,6 +3,7 @@ const db = require('./models/index');
 const app = require('./app');
 // Start the server on the given port
 db.instance.sync({force: true}).then(async () =>{
+    console.log('Database connected and synchronized');
     app.listen(port, () => {
         console.log('Server is running on port', port)
     })

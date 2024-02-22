@@ -8,24 +8,24 @@ jest.mock('../../models')   // Mocking the models
 
 const mockedAccount = [{
     id: 1,
-    beneficiaryId: 1,
+    beneficiaryName: 1,
     password: 'password',
     balance: 0
 }]
 
-describe('getAccountByBeneficiaryId', () => {
+describe('getAccountBybeneficiaryName', () => {
     it('should return an account', async () => {
         //Mock 
         db.account.findAll.mockResolvedValue(mockedAccount)
         //when 
-        const account = await accountService.getAccountByBeneficiaryId(1)
+        const account = await accountService.getAccountBybeneficiaryName(1)
         //Then
         expect(account).not.toBeNull()
         expect(account).toEqual(mockedAccount[0])
     })
     it('should not find account and return undefined', async () => {
         // When
-        const account = await accountService.getAccountByBeneficiaryId(1)
+        const account = await accountService.getAccountBybeneficiaryName(1)
         // Then
         expect(account).toBeUndefined()
     })
@@ -56,20 +56,20 @@ describe('addAccount', () => {
     })
     it('should returns account if registration works', async () => {
         // Given
-        const beneficiaryId= 1
+        const beneficiaryName= 1
         const password= "azertyuiop"
         const balance= 50
         // Mock
         db.account.create.mockReturnValueOnce({
-            beneficiaryId,
+            beneficiaryName,
             password: 'hashed',
             balance
         })
         // When
-        const accountAdded = await usersService.addAccount(beneficiaryId, password, balance)
+        const accountAdded = await usersService.addAccount(beneficiaryName, password, balance)
         // Then
         expect(accountAdded).not.toBeNull()
-        expect(accountAdded.beneficiaryId).toEqual(beneficiaryId)
+        expect(accountAdded.beneficiaryName).toEqual(beneficiaryName)
         expect(accountAdded.balance).toEqual(balance)
         // Assert password has been updated by service
         expect(accountAdded.password).not.toEqual(password)
