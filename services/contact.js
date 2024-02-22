@@ -18,22 +18,18 @@ exports.getContactByUsername = async (username) => {
 
 exports.addContact = async (username, password, role) => {
     const existingContact = await this.getContactByUsername(username)
+    if(username.length <= 2){
+        throw new BadRequest("Username must be at least 3 characters long")
+    }
     if (existingContact) {
         throw new BadRequest('Contact already exists')
     }
-    if(!((role="client")||(role="banquier")||(role="entreprise"))) {
-        throw new BadRequest('Need to have a role that already exist')
+    if(!((role=="client")||(role=="banquier")||(role=="entreprise")||(role=="admin"))) {
+        throw new BadRequest('Need an existing role')
     }
-    // switch (role) {
-    //     case "client" : 
-    //     break
-    //     case "banquier" :
-    //     break 
-    //     case "entreprise" :
-    //     break
-    //     default :
-    //     throw new BadRequest('Need to have a role that already exist')
-    // }
+    if(password.length <= 10){
+        throw new BadRequest("Password must be at least 10 characters long")
+    }
     return bcrypt.hash(password, 10).then((hash) => {
         return contact.create({username, password: hash, role})
     }).catch((e) => {
@@ -60,15 +56,19 @@ exports.loginContact = async (username, password) => {
     return token
 }
 
-    exports.deleteContactById = (id) => {
-        return contact.destroy({
-            where: {
-                id
-            }
-        })
-    }
+// exports.updateContact = async (username, password, role) => {
+//     const contact = await this.getContactByUsername(username)
+//     if 
+// }
+
+exports.deleteContactById = (id) => {
+    return contact.destroy({
+        where: {
+            id
+        }
+    })
+}
 
     //TODO: créer Update !
-    //TODO: créer rajouter condition (dans le controller je pense ) pour empécher création d'un contact sans username, password, ou role
-    //TODO: contact qui se créent en permanence en role "client" et non les autres ...
+    //TODO: créer rajouter condition (dans le controller je pense ) pour empécher création d'un contact sans username, password, ou role.
     //TODO: delete qui ne fonctionne pas voir erreur ...

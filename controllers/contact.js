@@ -9,7 +9,7 @@ exports.getContact = async (req, res) => {
 }
 
 exports.getContactByUsername = async (req, res, next) => {
-    const contact = await contactService.getContactByUsername(req.params.Id)
+    const contact = await contactService.getContactByUsername(req.params.username)
     if (contact) {
         res.json({success: true, data: contact})
     } else {

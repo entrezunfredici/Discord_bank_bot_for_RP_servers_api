@@ -14,4 +14,4 @@ module.exports = {
     contact: require('./contact')(instance)
 }
 
-//Pour plus tard, pour lier les modeles entre eux : instance.models.review.belongsTo(instance.models.contact)
+instance.models.account.belongsTo(instance.models.contact)
