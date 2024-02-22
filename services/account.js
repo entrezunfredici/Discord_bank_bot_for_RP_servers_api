@@ -8,7 +8,8 @@ exports.getAccountBybeneficiaryName = async (beneficiaryName) => {
     return account.findAll({
         where:{
             beneficiaryName
-        }
+        },
+        attributes: { exclude: ['password'] }
     })
 }
 
@@ -16,7 +17,8 @@ exports.getAccountById = async (id) => {
     return account.findOne({
         where:{
             id
-        }
+        },
+        attributes: { exclude: ['password'] }
     })
 }
 
@@ -43,7 +45,7 @@ exports.addAccount = async (beneficiaryName, password, balance) => {
         if(/[^a-zA-Z0-9]/.test(password)){
             passwordScore += 1;
         }
-        if(passwordScore < 5){
+        if(passwordScore < 1){
             throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
         }
         return bcrypt.hash(password, 10).then((hash) => {
