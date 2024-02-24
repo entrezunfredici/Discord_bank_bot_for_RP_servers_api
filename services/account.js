@@ -139,11 +139,6 @@ exports.changePassword = async (id, userId, password, newPassword) => {
         if(passwordScore < 1){
             throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
         }
-        return bcrypt.hash(password, 10).then((hash) => {
-            return account.create({beneficiaryName, password: hash, balance})
-        }).catch((e) => {
-            throw new ServerError(e.message)
-        })
         return bcrypt.hash(newPassword, 10).then((hash) => {
             console.log(hash)
             return account.update({
