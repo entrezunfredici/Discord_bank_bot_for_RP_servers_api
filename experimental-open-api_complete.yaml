@@ -250,11 +250,11 @@ paths:
             description: "NotFound"
 
   #accounts
-  /accounts/{beneficiaryId}:
+  /accounts/{beneficiaryName}:
     get:
       summary: Récupérer les comptes par ID de bénéficiaire
       parameters:
-        - name: beneficiaryId
+        - name: beneficiaryName
           in: path
           description: ID du bénéficiaire
           required: true
@@ -270,7 +270,7 @@ paths:
     delete:
       summary: Supprimer les comptes par ID de bénéficiaire
       parameters:
-        - name: beneficiaryId
+        - name: beneficiaryName
           in: path
           description: ID du bénéficiaire
           required: true
@@ -351,9 +351,9 @@ paths:
           application/json:
             schema:
               type: object
-              required: [beneficiaryId, password]
+              required: [beneficiaryName, password]
               properties:
-                beneficiaryId:
+                beneficiaryName:
                   type: integer
                 password:
                   type: string
@@ -591,7 +591,7 @@ components:
         id:
           type: integer
           example: 1
-        beneficiaryId:
+        beneficiaryName:
           type: integer
           example: 1
         password:
@@ -603,7 +603,7 @@ components:
       required:
         - id
         - password
-        - beneficiaryId
+        - beneficiaryName
         - balance
   requestBodies:
     accountCreation:

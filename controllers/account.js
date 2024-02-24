@@ -23,8 +23,8 @@ exports.accountMiddleware = async (req, res, next) => {
     }
 }
 
-exports.getAccountByBeneficiaryId = async (req, res, next)  => {
-    const account = await accountService.getAccountByBeneficiaryId(req.params.beneficiaryId)
+exports.getAccountBybeneficiaryName = async (req, res, next)  => {
+    const account = await accountService.getAccountBybeneficiaryName(req.params.beneficiaryName)
     if(account!=0){
         res.json({success: true, data: account})
     }else{
@@ -42,9 +42,9 @@ exports.getAccountById = async (req, res, next)  => {
 }
 
 exports.addAccount = async (req, res, next) => {
-    const {beneficiaryId, password, balance} = req.body
+    const {beneficiaryName, password, balance} = req.body
     try {
-        const account = await accountService.addAccount(beneficiaryId, password, balance)
+        const account = await accountService.addAccount(beneficiaryName, password, balance)
         if (!account) {
             throw new ServerError('cannot create this account')
         }
@@ -103,9 +103,9 @@ exports.deleteAccountById = async (req, res, next) => {
     }
 }
 
-exports.deleteAccountsByBeneficiaryID = async (req, res, next) => {
+exports.deleteAccountsBybeneficiaryName = async (req, res, next) => {
     try {
-        await accountService.deleteAccountsByBeneficiaryId(req.params.beneficiaryId)
+        await accountService.deleteAccountsBybeneficiaryName(req.params.beneficiaryName)
         res.status(200).send({success: true})
     } catch(e) {
         return next(createError(e.statusCode, e.message))

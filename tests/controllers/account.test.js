@@ -4,12 +4,12 @@ const usersService = require('../../services/account')
 
 const app = [{
     id: 1,
-    beneficiaryId: 1,
+    beneficiaryName: 1,
     password: 'password',
     balance: 0
 },{
     id: 2,
-    beneficiaryId: 2,
+    beneficiaryName: 2,
     password: 'poliakov',
     balance: 50
 }]
