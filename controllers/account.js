@@ -81,6 +81,19 @@ exports.accountBalance = async (req, res, next) => {
     }
 }
 
+exports.changePassword = async (req, res, next) => {
+    const {id, userId, password, newPassword} = req.body
+    try{
+        const change = await accountService.changePassword(id, userId, password, newPassword)
+        if(change){
+            return res.status(200).json({success: true, change})
+        }
+        return res.status(400).json({success: false})
+    } catch(e) {
+        return next(createError(e.statusCode, e.message))
+    }
+}
+
 exports.quickTransaction = async(req, res, next) => {
     const {id, cibleId, userId, sum} = req.body
     try{

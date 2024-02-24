@@ -110,6 +110,53 @@ exports.changeBalance = async (id, userId, sum, type) => {
     return account
 }
 
+exports.changePassword = async (id, userId, password, newPassword) => {
+    const account= await this.getAccountById(id)
+    if(!account){
+        throw new NotFound("this account doesn't exist")
+    }
+    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
+    writeRights=true
+    if(writeRights && bcrypt.compare(password, account.password)){
+        console.log(newPassword)
+        return account.update({newPassword})
+        passwordScore = 0;
+        if (newPassword.length > 10) {
+            passwordScore+=1;
+        }
+        if(/\d/.test(newPassword)){
+            passwordScore += 1;
+        }
+        if(/[a-z]/.test(newPassword)){
+            passwordScore += 1;
+        }
+        if(/[A-Z]/.test(newPassword)){
+            passwordScore += 1;
+        }
+        if(/[^a-zA-Z0-9]/.test(newPassword)){
+            passwordScore += 1;
+        }
+        if(passwordScore < 1){
+            throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
+        }
+        return bcrypt.hash(password, 10).then((hash) => {
+            return account.create({beneficiaryName, password: hash, balance})
+        }).catch((e) => {
+            throw new ServerError(e.message)
+        })
+        return bcrypt.hash(newPassword, 10).then((hash) => {
+            console.log(hash)
+            return account.update({
+                password: hash
+            })
+        }).catch((e) => {
+            throw new ServerError(e.message)
+        })
+    }else{
+        throw new NotLogged("you haven't access rights")
+    }
+}
+
 exports.quickTransaction = async (id, cibleId, userId, sum) => {
     const account= await this.getAccountById(id)
     const cibleAccount= await this.getAccountById(cibleId)

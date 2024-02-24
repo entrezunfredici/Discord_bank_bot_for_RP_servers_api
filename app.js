@@ -14,7 +14,7 @@ app.use(
     })
 )
 
-/* For allow to user 
+/* For allow to use
     pour ajouter un router au serveur il est nécéssaire d'utiliser les deux commandes suivantes:
     et remplacer <router> par le nom de votre routeur
     yourRouter par le nom que vous voulez
