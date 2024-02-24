@@ -1,6 +1,6 @@
 const { account } = require('../models')
 const bcrypt = require('bcrypt')
-const contactService = require('./contact')
+const passwords = require('./passwords')
 const jwt = require('jsonwebtoken')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
@@ -29,23 +29,7 @@ exports.addAccount = async (beneficiaryName, password, balance) => {
         if(!balance){
             balance=0
         }
-        passwordScore = 0;
-        if (password.length > 10) {
-            passwordScore+=1;
-        }
-        if(/\d/.test(password)){
-            passwordScore += 1;
-        }
-        if(/[a-z]/.test(password)){
-            passwordScore += 1;
-        }
-        if(/[A-Z]/.test(password)){
-            passwordScore += 1;
-        }
-        if(/[^a-zA-Z0-9]/.test(password)){
-            passwordScore += 1;
-        }
-        if(passwordScore < 1){
+        if(passwords.notePassword(password) < 1){
             throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
         }
         return bcrypt.hash(password, 10).then((hash) => {
@@ -120,23 +104,7 @@ exports.changePassword = async (id, userId, password, newPassword) => {
     if(writeRights && bcrypt.compare(password, account.password)){
         console.log(newPassword)
         return account.update({newPassword})
-        passwordScore = 0;
-        if (newPassword.length > 10) {
-            passwordScore+=1;
-        }
-        if(/\d/.test(newPassword)){
-            passwordScore += 1;
-        }
-        if(/[a-z]/.test(newPassword)){
-            passwordScore += 1;
-        }
-        if(/[A-Z]/.test(newPassword)){
-            passwordScore += 1;
-        }
-        if(/[^a-zA-Z0-9]/.test(newPassword)){
-            passwordScore += 1;
-        }
-        if(passwordScore < 1){
+        if(passwords.notePassword(newPassword) < 1){
             throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
         }
         return bcrypt.hash(newPassword, 10).then((hash) => {
