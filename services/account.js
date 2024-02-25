@@ -132,9 +132,9 @@ exports.quickTransaction = async (id, receiverId, userId, sum) => {
         if(sum>account.balance){
             throw new BadRequest("you don't have enough money")
         }
-        receiversum = receiverAccount.balance+sum
+        receiverAmount = receiverAccount.balance+sum
         receiverAccount.update({
-            balance: receiversum
+            balance: receiverAmount
         })
         sum = account.balance-sum
         account.update({
