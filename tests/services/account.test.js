@@ -1,7 +1,6 @@
 const accountService = require('../../services/account')
 const db = require('../../models')
 const bcrypt = require('bcrypt')
-const { DESCRIBE } = require('sequelize/types/query-types')
 require('dotenv').config()
 
 jest.mock('../../models')   // Mocking the models
@@ -169,7 +168,7 @@ describe('quickTransaction', () => {
         db.account.findOne.mockReturnValueOnce(mockedAccount[0])
         db.account.update.mockReturnValueOnce([1])
         // When
-        const account = await accountService.quickTransaction(id, receiverId, userId, amount)
+        const account = await accountService.quickTransaction(id, receiverId, userId, sum)
         // Then
         expect(account).not.toBeNull()
         expect(account.balance).toEqual(mockedAccount[0].balance - amount)

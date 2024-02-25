@@ -11,11 +11,13 @@ router.post('/login', accountController.accountLogin);
 router.post('/add', accountController.addAccount);
 //route pour faire une transaction
 router.post('/transaction', accountController.accountBalance);
+//route pour changer le mot de passe
+router.post('/changePassword', accountController.changePassword);
 //route pour faire une transaction directe
 router.post("/quickTransaction", accountController.quickTransaction);
 //route pour supprimer un compte
-router.delete('/Id=:Id&userId=:userId', accountController.deleteAccountById)
+router.delete('/Id=:Id&userId=:userId', accountController.deleteAccountById);
 //route pour supprimer un compte via l'id du bénéficiaire
-router.delete('/beneficiaryName=:beneficiaryName', accountController.deleteAccountsBybeneficiaryName)
+router.delete('/beneficiaryName=:beneficiaryName', accountController.deleteAccountsBybeneficiaryName);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const { account } = require('../models')
 const bcrypt = require('bcrypt')
-const contactService = require('./contact')
+const passwords = require('./passwords')
 const jwt = require('jsonwebtoken')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
@@ -8,7 +8,8 @@ exports.getAccountBybeneficiaryName = async (beneficiaryName) => {
     return account.findAll({
         where:{
             beneficiaryName
-        }
+        },
+        attributes: { exclude: ['password'] }
     })
 }
 
@@ -16,7 +17,8 @@ exports.getAccountById = async (id) => {
     return account.findOne({
         where:{
             id
-        }
+        },
+        attributes: { exclude: ['password'] }
     })
 }
 
@@ -27,8 +29,8 @@ exports.addAccount = async (beneficiaryName, password, balance) => {
         if(!balance){
             balance=0
         }
-        if(password.length <= 10){
-            throw new BadRequest("password must be at least 10 characters long")
+        if(passwords.notePassword(password) < 1){
+            throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
         }
         return bcrypt.hash(password, 10).then((hash) => {
             return account.create({beneficiaryName, password: hash, balance})
@@ -92,10 +94,36 @@ exports.changeBalance = async (id, userId, amount, type) => {
     return account
 }
 
-exports.quickTransaction = async (id, receiverId, userId, amount) => {
+exports.changePassword = async (id, userId, password, newPassword) => {
     const account= await this.getAccountById(id)
-    const cibleAccount= await this.getAccountById(receiverId)
     if(!account){
+        throw new NotFound("this account doesn't exist")
+    }
+    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
+    writeRights=true
+    if(writeRights && bcrypt.compare(password, account.password)){
+        console.log(newPassword)
+        return account.update({newPassword})
+        if(passwords.notePassword(newPassword) < 1){
+            throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
+        }
+        return bcrypt.hash(newPassword, 10).then((hash) => {
+            console.log(hash)
+            return account.update({
+                password: hash
+            })
+        }).catch((e) => {
+            throw new ServerError(e.message)
+        })
+    }else{
+        throw new NotLogged("you haven't access rights")
+    }
+}
+
+exports.quickTransaction = async (id, receiverId, userId, sum) => {
+    const account= await this.getAccountById(id)
+    const receiverAccount= await this.getAccountById(receiverId)
+    if(!account || !receiverAccount){
         throw new NotFound("this account doesn't exist")
     }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
@@ -104,9 +132,9 @@ exports.quickTransaction = async (id, receiverId, userId, amount) => {
         if(amount>account.balance){
             throw new BadRequest("you don't have enough money")
         }
-        cibleamount = cibleAccount.balance+amount
-        cibleAccount.update({
-            balance: cibleamount
+        receiversum = receiverAccount.balance+sum
+        receiverAccount.update({
+            balance: receiversum
         })
         amount = account.balance-amount
         account.update({

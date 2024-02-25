@@ -70,7 +70,20 @@ exports.accountLogin = async (req, res, next) => {
 exports.accountBalance = async (req, res, next) => {
     const {id, userId, amount, type} = req.body
     try{
-        const change = await accountService.changeBalance(id, userId, amount, type)
+        const change = await accountService.changeBalance(id, userId, sum, type)
+        if(change){
+            return res.status(200).json({success: true, change})
+        }
+        return res.status(400).json({success: false})
+    } catch(e) {
+        return next(createError(e.statusCode, e.message))
+    }
+}
+
+exports.changePassword = async (req, res, next) => {
+    const {id, userId, password, newPassword} = req.body
+    try{
+        const change = await accountService.changePassword(id, userId, password, newPassword)
         if(change){
             return res.status(200).json({success: true, change})
         }
@@ -81,9 +94,9 @@ exports.accountBalance = async (req, res, next) => {
 }
 
 exports.quickTransaction = async(req, res, next) => {
-    const {id, receiverId, userId, amount} = req.body
+    const {id, receiverId, userId, sum} = req.body
     try{
-        const exchange = await accountService.quickTransaction(id, receiverId, userId, amount)
+        const exchange = await accountService.quickTransaction(id, receiverId, userId, sum)
         if(exchange){
             return res.status(200).json({success: true, exchange})
         }

@@ -116,7 +116,8 @@ paths:
 #accounts
   /accounts/{beneficiaryName}:
     get:
-      amountmary: Récupérer les comptes par ID de bénéficiaire
+      summary: Récupérer les comptes par ID de bénéficiaire
+      operationId: getAccountByBeneficiaryId
       parameters:
         - name: beneficiaryName
           in: path
@@ -132,7 +133,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Account'
     delete:
-      amountmary: Supprimer les comptes par ID de bénéficiaire
+      summary: Supprimer les comptes par ID de bénéficiaire
+      operationId: deleteAccountByBeneficiaryId
       parameters:
         - name: beneficiaryName
           in: path
@@ -146,7 +148,8 @@ paths:
 
   /accounts/{id}:
     get:
-      amountmary: Récupérer un compte par ID
+      summary: Récupérer un compte par ID
+      operationId: getAccountById
       parameters:
         - name: id
           in: path
@@ -162,7 +165,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Account'
     delete:
-      amountmary: Supprimer un compte par ID
+      summary: Supprimer un compte par ID
+      operationId: deleteAccountById
       parameters:
         - name: id
           in: path

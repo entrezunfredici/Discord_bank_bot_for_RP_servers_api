@@ -1,6 +1,6 @@
 const request = require('supertest')
 const app = require('../../app')
-const usersService = require('../../services/account')
+const accountService = require('../../services/account')
 
 const app = [{
     id: 1,
