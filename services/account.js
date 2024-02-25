@@ -61,7 +61,7 @@ exports.accountLogin = async (userId, id, password) => {
     }
 }
 
-exports.changeBalance = async (id, userId, amount, type) => {
+exports.changeBalance = async (id, userId, sum, type) => {
     const account= await this.getAccountById(id)
     if(!account){
         throw new NotFound("this account doesn't exist")
@@ -71,18 +71,18 @@ exports.changeBalance = async (id, userId, amount, type) => {
     if(writeRights){
         switch(type){
             case "withdrawal":
-                if(amount>account.balance){
+                if(sum>account.balance){
                     throw new BadRequest("you don't have enough money")
                 }
-                amount = account.balance-amount 
+                sum = account.balance-sum 
                 account.update({
-                    balance: amount
+                    balance: sum
                 })
                 break
             case "payment":
-                amount += account.balance
+                sum += account.balance
                 account.update({
-                    balance: amount
+                    balance: sum
                 })
                 break
             default:
@@ -129,16 +129,16 @@ exports.quickTransaction = async (id, receiverId, userId, sum) => {
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
     writeRights=true
     if(writeRights){
-        if(amount>account.balance){
+        if(sum>account.balance){
             throw new BadRequest("you don't have enough money")
         }
         receiversum = receiverAccount.balance+sum
         receiverAccount.update({
             balance: receiversum
         })
-        amount = account.balance-amount
+        sum = account.balance-sum
         account.update({
-            balance: amount
+            balance: sum
         })
     }else{
         throw new NotLogged("you haven't access rights")

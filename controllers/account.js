@@ -68,7 +68,7 @@ exports.accountLogin = async (req, res, next) => {
 }
 
 exports.accountBalance = async (req, res, next) => {
-    const {id, userId, amount, type} = req.body
+    const {id, userId, sum, type} = req.body
     try{
         const change = await accountService.changeBalance(id, userId, sum, type)
         if(change){

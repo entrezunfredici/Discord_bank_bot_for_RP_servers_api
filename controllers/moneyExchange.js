@@ -30,9 +30,9 @@ exports.getMoneyExchangeById = async (req, res, next)  => {
 }
 
 exports.addMoneyExchange = async (req, res, next) => {
-    const {name, reason, date, amount, senderId, receiverId} = req.body
+    const {name, reason, date, sum, senderId, receiverId} = req.body
     try {
-        const moneyExchange = await moneyExchangesService.addMoneyExchange(name, reason, date, amount, senderId, receiverId)
+        const moneyExchange = await moneyExchangesService.addMoneyExchange(name, reason, date, sum, senderId, receiverId)
         if (!moneyExchange) {
             throw new ServerError('cannot save this money exchange')
         }

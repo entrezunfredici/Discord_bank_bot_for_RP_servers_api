@@ -4,7 +4,7 @@ const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 const settedSenderId=0
 const settedReceiverId=0
 const settedUserId=0
-const settedAmount=0
+const settedsum=0
 const settedStartDate=0
 const settedTimeRange=0
 
@@ -32,18 +32,18 @@ exports.getRegularMoneyExchangesByReceiverId = async (receiverId) => {
     })
 }
 
-exports.addRegularMoneyExchange = async (senderId, receiverId, userId, amount, startDate, timeRange) => {
-    if ((!amount) || (!startDate) || (!timeRange)) {
-        throw new BadRequest("amount, startDate and timeRanges are required")
+exports.addRegularMoneyExchange = async (senderId, receiverId, userId, sum, startDate, timeRange) => {
+    if ((!sum) || (!startDate) || (!timeRange)) {
+        throw new BadRequest("sum, startDate and timeRanges are required")
     }
     // settedSenderId=senderId
     // settedReceiverId=receiverId
     // settedUserId=userId
-    // settedAmount=amount
+    // settedsum=sum
     // settedStartDate=startDate
     // settedTimeRange=timeRange
-    //test = await this.intervallUpdateAccountSystem(senderId, receiverId, amount, startDate, timeRange);
-    return regularMoneyExchanges.create({ senderId, receiverId, amount, startDate, timeRange })
+    //test = await this.intervallUpdateAccountSystem(senderId, receiverId, sum, startDate, timeRange);
+    return regularMoneyExchanges.create({ senderId, receiverId, sum, startDate, timeRange })
 }
 
 exports.deleteRegularMoneyExchangeById = async (id, userid) => {
@@ -61,18 +61,18 @@ exports.deleteRegularMoneyExchangeById = async (id, userid) => {
     return regularMoneyExchange.destroy()
 }
 
-// exports.intervallUpdateAccountSystem = async (senderId, receiverId, amount, startDate, timeRange) => {
+// exports.intervallUpdateAccountSystem = async (senderId, receiverId, sum, startDate, timeRange) => {
 //     //for(k=0; k<1000000; k++)
-//     accountService.quickTransaction(senderId, receiverId, userId, amount)
+//     accountService.quickTransaction(senderId, receiverId, userId, sum)
 //     //for(k=0; k<10000000000; k++)
-//     //accountService.quickTransaction(senderId, receiverId, userId, amount)
-//     //var exchangeInterval = setInterval(accountService.quickTransaction(senderId, receiverId, userId, amount),(timeRange*1000));
+//     //accountService.quickTransaction(senderId, receiverId, userId, sum)
+//     //var exchangeInterval = setInterval(accountService.quickTransaction(senderId, receiverId, userId, sum),(timeRange*1000));
 //     return 1;
 // }
 // Définition de la fonction à exécuter à intervalle régulier
 function intervallUpdateAccountSystem() {
     console.log("Ma fonction s'exécute");
-    accountService.quickTransaction(settedSenderId, settedReceiverId, settedUserId, settedAmount)
+    accountService.quickTransaction(settedSenderId, settedReceiverId, settedUserId, settedsum)
 }
 
 // Appel de la fonction à intervalle régulier (par exemple, toutes les 5 secondes)

@@ -20,7 +20,7 @@ module.exports = (instance) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        amount: {
+        sum: {
             type: DataTypes.INTEGER,
             allownull: false
         },

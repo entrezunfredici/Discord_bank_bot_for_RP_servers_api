@@ -16,7 +16,7 @@ module.exports = (instance) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        amount: {
+        sum: {
             type: DataTypes.FLOAT,
             allownull: false
         },

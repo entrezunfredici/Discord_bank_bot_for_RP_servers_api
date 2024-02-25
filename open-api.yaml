@@ -19,7 +19,7 @@ paths:
     get:
       tags:
         - contact
-      amountmary: Get all contacts
+      summary: Get all contacts
       responses:
         "200":
           description: "OK"
@@ -38,7 +38,7 @@ paths:
     post:
       tags:
         - contact
-      amountmary: Login as contact
+      summary: Login as contact
       requestBody:
         content:
           application/json:
@@ -61,7 +61,7 @@ paths:
     post:
       tags:
         - contact
-      amountmary: Add new contact
+      summary: Add new contact
       requestBody:
         content:
           application/json:
@@ -82,7 +82,7 @@ paths:
   #   get: 
   #     tags:
   #       - contact
-  #     amountmary: Get a contact by username
+  #     summary: Get a contact by username
   #     operationId: getContactByUsername
   #     parameters:
   #       - name: username
@@ -105,7 +105,7 @@ paths:
   #   delete:
   #     tags:
   #       - contact
-  #     amountmary: Delete contact by id
+  #     summary: Delete contact by id
   #     operation: deleteContactById
   #     responses:
   #         "200":
@@ -180,7 +180,7 @@ paths:
 
   /accounts/login:
     post:
-      amountmary: Se connecter à un compte
+      summary: Se connecter à un compte
       requestBody:
         required: true
         content:
@@ -212,7 +212,7 @@ paths:
 
   /accounts/add:
     post:
-      amountmary: Ajouter un compte
+      summary: Ajouter un compte
       requestBody:
         required: true
         content:
@@ -244,20 +244,20 @@ paths:
 
   /accounts/transaction:
     post:
-      amountmary: Effectuer une transaction
+      summary: Effectuer une transaction
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [Id, userId, amount, type]
+              required: [Id, userId, sum, type]
               properties:
                 id:
                   type: integer
                 userId:
                   type: integer
-                amount:
+                sum:
                   type: number
                 type:
                   type: string
@@ -278,14 +278,14 @@ paths:
 
   /accounts/quickTransaction:
     post:
-      amountmary: Effectuer une transaction rapide
+      summary: Effectuer une transaction rapide
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [id, receiverId, userId, amount]
+              required: [id, receiverId, userId, sum]
               properties:
                 id:
                   type: integer
@@ -293,7 +293,7 @@ paths:
                   type: integer
                 userId:
                   type: integer
-                amount:
+                sum:
                   type: number
       responses:
         '200':
