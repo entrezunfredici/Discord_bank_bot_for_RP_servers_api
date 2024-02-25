@@ -11,7 +11,8 @@ module.exports = {
     /*to add an model type:
     model: require('./model')(instance)*/
     account: require('./account')(instance),
-    contact: require('./contact')(instance)
+    contact: require('./contact')(instance),
+    moneyExchange: require('./moneyExchange')(instance)
 }
 
 //instance.models.account.belongsTo(instance.models.contact)

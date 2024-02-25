@@ -59,7 +59,7 @@ exports.accountLogin = async (userId, id, password) => {
     }
 }
 
-exports.changeBalance = async (id, userId, sum, type) => {
+exports.changeBalance = async (id, userId, amount, type) => {
     const account= await this.getAccountById(id)
     if(!account){
         throw new NotFound("this account doesn't exist")
@@ -69,18 +69,18 @@ exports.changeBalance = async (id, userId, sum, type) => {
     if(writeRights){
         switch(type){
             case "withdrawal":
-                if(sum>account.balance){
+                if(amount>account.balance){
                     throw new BadRequest("you don't have enough money")
                 }
-                sum = account.balance-sum 
+                amount = account.balance-amount 
                 account.update({
-                    balance: sum
+                    balance: amount
                 })
                 break
             case "payment":
-                sum += account.balance
+                amount += account.balance
                 account.update({
-                    balance: sum
+                    balance: amount
                 })
                 break
             default:
@@ -92,25 +92,25 @@ exports.changeBalance = async (id, userId, sum, type) => {
     return account
 }
 
-exports.quickTransaction = async (id, cibleId, userId, sum) => {
+exports.quickTransaction = async (id, receiverId, userId, amount) => {
     const account= await this.getAccountById(id)
-    const cibleAccount= await this.getAccountById(cibleId)
+    const cibleAccount= await this.getAccountById(receiverId)
     if(!account){
         throw new NotFound("this account doesn't exist")
     }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
     writeRights=true
     if(writeRights){
-        if(sum>account.balance){
+        if(amount>account.balance){
             throw new BadRequest("you don't have enough money")
         }
-        cibleSum = cibleAccount.balance+sum
+        cibleamount = cibleAccount.balance+amount
         cibleAccount.update({
-            balance: cibleSum
+            balance: cibleamount
         })
-        sum = account.balance-sum
+        amount = account.balance-amount
         account.update({
-            balance: sum
+            balance: amount
         })
     }else{
         throw new NotLogged("you haven't access rights")

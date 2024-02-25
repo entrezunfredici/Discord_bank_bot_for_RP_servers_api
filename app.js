@@ -7,12 +7,12 @@ const OpenApiValidator = require('express-openapi-validator') // Module pour val
 app.use(express.json())
 
 // Middleware d'openAPI
-app.use(
-    OpenApiValidator.middleware({
-        apiSpec: './open-api.yaml',
-        ignoreUndocumented: true
-    })
-)
+// app.use(
+//     OpenApiValidator.middleware({
+//         apiSpec: './open-api.yaml',
+//         ignoreUndocumented: true
+//     })
+// )
 
 /* For allow to user 
     pour ajouter un router au serveur il est nécéssaire d'utiliser les deux commandes suivantes:
@@ -29,5 +29,8 @@ app.use('/account', accountRouter)
 //router pour les contacts
 const contactRouter = require('./routers/contact')
 app.use('/contact', contactRouter)
+//routeur pour les echanges
+const moneyExchangesRouter = require('./routers/moneyExchange')
+app.use('/moneyExchange', moneyExchangesRouter)
 
 module.exports = app

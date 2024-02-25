@@ -1,6 +1,7 @@
 const router = require('express').Router(), 
 accountController = require('../controllers/account')
-//route pour obtennir un compte via l'id du bénéficiaire
+
+//route pour obtennir un compte via le nom du bénéficiaire
 router.get('/beneficiaryName=:beneficiaryName', accountController.getAccountBybeneficiaryName);
 //route pour obtennir un compte via l'id du compte
 router.get('/Id=:Id', accountController.getAccountById);
