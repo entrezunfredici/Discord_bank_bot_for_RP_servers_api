@@ -25,11 +25,11 @@ exports.getMoneyExchangeById = async (id) => {
     })
 }
 
-exports.addMoneyExchange = async (name, reason, date, sum, senderId, receiverId) => {
-    if(!sum){
+exports.addMoneyExchange = async (name, reason, date, amount, senderId, receiverId) => {
+    if(!amount){
         return new BadRequest("error")
     }else{
-        return moneyExchange.create({name, reason, date, sum, senderId, receiverId})
+        return moneyExchange.create({name, reason, date, amount, senderId, receiverId})
     }
 }
 

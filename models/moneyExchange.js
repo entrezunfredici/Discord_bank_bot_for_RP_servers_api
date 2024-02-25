@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize')
 
 module.exports = (instance) => {
-    return instance.define('account', {
+    return instance.define('moneyExchanges', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -20,7 +20,7 @@ module.exports = (instance) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        sum: {
+        amount: {
             type: DataTypes.INTEGER,
             allownull: false
         },
