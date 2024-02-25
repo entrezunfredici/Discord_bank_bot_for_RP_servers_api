@@ -19,7 +19,7 @@ paths:
     get:
       tags:
         - contact
-      summary: Get all contacts
+      amountmary: Get all contacts
       responses:
         "200":
           description: "OK"
@@ -38,7 +38,7 @@ paths:
     post:
       tags:
         - contact
-      summary: Login as contact
+      amountmary: Login as contact
       requestBody:
         content:
           application/json:
@@ -61,7 +61,7 @@ paths:
     post:
       tags:
         - contact
-      summary: Add new contact
+      amountmary: Add new contact
       requestBody:
         content:
           application/json:
@@ -82,7 +82,7 @@ paths:
   #   get: 
   #     tags:
   #       - contact
-  #     summary: Get a contact by username
+  #     amountmary: Get a contact by username
   #     operationId: getContactByUsername
   #     parameters:
   #       - name: username
@@ -105,7 +105,7 @@ paths:
   #   delete:
   #     tags:
   #       - contact
-  #     summary: Delete contact by id
+  #     amountmary: Delete contact by id
   #     operation: deleteContactById
   #     responses:
   #         "200":
@@ -116,7 +116,7 @@ paths:
 #accounts
   /accounts/{beneficiaryName}:
     get:
-      summary: Récupérer les comptes par ID de bénéficiaire
+      amountmary: Récupérer les comptes par ID de bénéficiaire
       parameters:
         - name: beneficiaryName
           in: path
@@ -132,7 +132,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Account'
     delete:
-      summary: Supprimer les comptes par ID de bénéficiaire
+      amountmary: Supprimer les comptes par ID de bénéficiaire
       parameters:
         - name: beneficiaryName
           in: path
@@ -146,7 +146,7 @@ paths:
 
   /accounts/{id}:
     get:
-      summary: Récupérer un compte par ID
+      amountmary: Récupérer un compte par ID
       parameters:
         - name: id
           in: path
@@ -162,7 +162,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Account'
     delete:
-      summary: Supprimer un compte par ID
+      amountmary: Supprimer un compte par ID
       parameters:
         - name: id
           in: path
@@ -176,7 +176,7 @@ paths:
 
   /accounts/login:
     post:
-      summary: Se connecter à un compte
+      amountmary: Se connecter à un compte
       requestBody:
         required: true
         content:
@@ -208,7 +208,7 @@ paths:
 
   /accounts/add:
     post:
-      summary: Ajouter un compte
+      amountmary: Ajouter un compte
       requestBody:
         required: true
         content:
@@ -240,20 +240,20 @@ paths:
 
   /accounts/transaction:
     post:
-      summary: Effectuer une transaction
+      amountmary: Effectuer une transaction
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [Id, userId, sum, type]
+              required: [Id, userId, amount, type]
               properties:
                 id:
                   type: integer
                 userId:
                   type: integer
-                sum:
+                amount:
                   type: number
                 type:
                   type: string
@@ -274,22 +274,22 @@ paths:
 
   /accounts/quickTransaction:
     post:
-      summary: Effectuer une transaction rapide
+      amountmary: Effectuer une transaction rapide
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [id, cibleId, userId, sum]
+              required: [id, receiverId, userId, amount]
               properties:
                 id:
                   type: integer
-                cibleId:
+                receiverId:
                   type: integer
                 userId:
                   type: integer
-                sum:
+                amount:
                   type: number
       responses:
         '200':

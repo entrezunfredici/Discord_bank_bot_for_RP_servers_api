@@ -1,5 +1,5 @@
 const router = require('express').Router(),
-    contactController = require('../controllers/contact')
+contactController = require('../controllers/contact')
 
 router.get('/', contactController.getContact)
 router.get('/:username', contactController.getContactByUsername)

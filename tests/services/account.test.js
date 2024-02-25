@@ -139,16 +139,16 @@ describe('changeBalance', () => {
         // Given
         const id = 1
         const userId = 1
-        const sum = 50
+        const amount = 50
         const type = 'withdrawal'
         // Mock
         db.account.findOne.mockReturnValueOnce(mockedAccount[0])
         db.account.update.mockReturnValueOnce([1])
         // When
-        const account = await accountService.changeBalance(id, userId, sum, type)
+        const account = await accountService.changeBalance(id, userId, amount, type)
         // Then
         expect(account).not.toBeNull()
-        expect(account.balance).toEqual(mockedAccount[0].balance + sum)
+        expect(account.balance).toEqual(mockedAccount[0].balance + amount)
     })
 })
 
@@ -162,16 +162,16 @@ describe('quickTransaction', () => {
     it('should returns account if quick transaction works', async () => {
         // Given
         const id = 1
-        const cibleId = 2
+        const receiverId = 2
         const userId = 1
-        const sum = 50
+        const amount = 50
         // Mock
         db.account.findOne.mockReturnValueOnce(mockedAccount[0])
         db.account.update.mockReturnValueOnce([1])
         // When
-        const account = await accountService.quickTransaction(id, cibleId, userId, sum)
+        const account = await accountService.quickTransaction(id, receiverId, userId, amount)
         // Then
         expect(account).not.toBeNull()
-        expect(account.balance).toEqual(mockedAccount[0].balance - sum)
+        expect(account.balance).toEqual(mockedAccount[0].balance - amount)
     })
 })

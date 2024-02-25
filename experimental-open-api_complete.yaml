@@ -35,7 +35,7 @@ paths:
     post:
       tags:
         - contacts
-      summary: Login as user
+      amountmary: Login as user
       requestBody:
         content:
           application/json:
@@ -58,7 +58,7 @@ paths:
     post:
       tags:
         - contacts
-      summary: Add new user
+      amountmary: Add new user
       requestBody:
         content:
           application/json:
@@ -81,7 +81,7 @@ paths:
     get: 
       tags:
         - contacts
-      summary: Get a user by ID 
+      amountmary: Get a user by ID 
       operationId: getContactByID
       parameters:
         - name: id
@@ -97,7 +97,7 @@ paths:
     delete:
       tags:
         - contacts
-      summary: Delete contact by id
+      amountmary: Delete contact by id
       operation: delecteContactByID
       responses:
           "200":
@@ -110,7 +110,7 @@ paths:
     post:
       tags:
         - partners
-      summary: Add new partnership
+      amountmary: Add new partnership
       requestBody:
         content:
           application/json:
@@ -133,7 +133,7 @@ paths:
     get: 
       tags:
         - partners
-      summary: Get a partnership by contactID 
+      amountmary: Get a partnership by contactID 
       operationId: getPartnerByContactID
       parameters:
         - name: id
@@ -149,7 +149,7 @@ paths:
     delete:
       tags:
         - partners
-      summary: Delete partner by contactID
+      amountmary: Delete partner by contactID
       operation: delectePartnerByContactID
       parameters:
         - $ref: '#/components/parameters/IdInPath'
@@ -173,7 +173,7 @@ paths:
     get: 
       tags:
         - partners
-      summary: Get a partnership by contactPartnerID 
+      amountmary: Get a partnership by contactPartnerID 
       operationId: getPartnerByContactPartnerID
       parameters:
         - name: id
@@ -189,7 +189,7 @@ paths:
     delete:
       tags:
         - partners
-      summary: Delete partner by contact partner id
+      amountmary: Delete partner by contact partner id
       operationId: deletePartnerByContactPartnerId
       parameters:
         - $ref: '#/components/parameters/IdInPath'
@@ -213,7 +213,7 @@ paths:
     get: 
       tags:
         - partners
-      summary: Get a partnership by ID 
+      amountmary: Get a partnership by ID 
       operationId: getPartnerByID
       parameters:
         - name: id
@@ -229,7 +229,7 @@ paths:
     delete:
       tags:
         - partners
-      summary: Delete partner by id
+      amountmary: Delete partner by id
       operationId: deletePartnerById
       parameters:
         - $ref: '#/components/parameters/IdInPath'
@@ -252,7 +252,7 @@ paths:
   #accounts
   /accounts/{beneficiaryName}:
     get:
-      summary: Récupérer les comptes par ID de bénéficiaire
+      amountmary: Récupérer les comptes par ID de bénéficiaire
       parameters:
         - name: beneficiaryName
           in: path
@@ -268,7 +268,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Account'
     delete:
-      summary: Supprimer les comptes par ID de bénéficiaire
+      amountmary: Supprimer les comptes par ID de bénéficiaire
       parameters:
         - name: beneficiaryName
           in: path
@@ -282,7 +282,7 @@ paths:
 
   /accounts/{id}:
     get:
-      summary: Récupérer un compte par ID
+      amountmary: Récupérer un compte par ID
       parameters:
         - name: id
           in: path
@@ -298,7 +298,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Account'
     delete:
-      summary: Supprimer un compte par ID
+      amountmary: Supprimer un compte par ID
       parameters:
         - name: id
           in: path
@@ -312,7 +312,7 @@ paths:
 
   /accounts/login:
     post:
-      summary: Se connecter à un compte
+      amountmary: Se connecter à un compte
       requestBody:
         required: true
         content:
@@ -344,7 +344,7 @@ paths:
 
   /accounts/add:
     post:
-      summary: Ajouter un compte
+      amountmary: Ajouter un compte
       requestBody:
         required: true
         content:
@@ -376,20 +376,20 @@ paths:
 
   /accounts/transaction:
     post:
-      summary: Effectuer une transaction
+      amountmary: Effectuer une transaction
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [Id, userId, sum, type]
+              required: [Id, userId, amount, type]
               properties:
                 id:
                   type: integer
                 userId:
                   type: integer
-                sum:
+                amount:
                   type: number
                 type:
                   type: string
@@ -410,22 +410,22 @@ paths:
 
   /accounts/quickTransaction:
     post:
-      summary: Effectuer une transaction rapide
+      amountmary: Effectuer une transaction rapide
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [id, cibleId, userId, sum]
+              required: [id, receiverId, userId, amount]
               properties:
                 id:
                   type: integer
-                cibleId:
+                receiverId:
                   type: integer
                 userId:
                   type: integer
-                sum:
+                amount:
                   type: number
       responses:
         '200':
@@ -447,20 +447,20 @@ paths:
     post:
       tags:
         - exchanges
-      summary: Do one account transactions
+      amountmary: Do one account transactions
       requestBody:
         content:
           application/json:
             schema:
-              required: [yourid, yourpassword, cibleid, sum]
+              required: [yourid, yourpassword, receiverId, amount]
               properties:
                 yourid:
                   type: int
                 yourpassword:
                   type: string
-                cibleid:
+                receiverId:
                   type: int
-                sum:
+                amount:
                   type: float
       responses:
         "201":
@@ -470,21 +470,21 @@ paths:
   /regularMoneyExchanges/add:
     post:
       tags:
-        - regularMoneyExchanges
-      summary: automatic transactions
+        - automaticCashWithDrawal
+      amountmary: automatic transactions
       requestBody:
         content:
           application/json:
             schema:
-              required: [youridentifier, yourpassword, cibleidentifier, sum, delay, delayUnit]
+              required: [youridentifier, yourpassword, receiverIdentifier, amount, delay, delayUnit]
               properties:
                 youridentifier:
                   type: string
                 yourpassword:
                   type: string
-                cibleidentifier:
+                receiverIdentifier:
                   type: string
-                sum:
+                amount:
                   type: float
                 delayUnit:
                   type: int
@@ -502,7 +502,7 @@ paths:
     post:
       tags:
         - accountRights
-      summary: access rights
+      amountmary: access rights
       requestBody:
         content:
           application/json:
@@ -523,7 +523,7 @@ paths:
     get:
       tags:
         - accountRights
-      summary: get account rights
+      amountmary: get account rights
       operationId: getAccountRightsByUserIDAndAccountID
       parameters:
         - name: userID
@@ -544,7 +544,7 @@ paths:
     delete:
       tags:
         - accountRights
-      summary: delete rights
+      amountmary: delete rights
       operationId: deleteAccountRightsByUserIDAndAccountID
       parameters:
         -$ref: "#/components/parameters/idInPath"

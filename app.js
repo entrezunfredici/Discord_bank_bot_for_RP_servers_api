@@ -33,5 +33,8 @@ app.use('/contact', contactRouter)
 //router pour les payments réguliers
 const regularMoneyExchangesRouter = require('./routers/regularMoneyExchanges')
 app.use('/regularMoneyExchange', regularMoneyExchangesRouter)
+//routeur pour les echanges
+const moneyExchangesRouter = require('./routers/moneyExchange')
+app.use('/moneyExchange', moneyExchangesRouter)
 
 module.exports = app

@@ -12,6 +12,8 @@ module.exports = {
     model: require('./model')(instance)*/
     account: require('./account')(instance),
     contact: require('./contact')(instance),
+    moneyExchange: require('./moneyExchange')(instance)
+    contact: require('./contact')(instance),
     regularMoneyExchanges: require('./regularMoneyExchanges')(instance)
 }
 //instance.models.account.belongsTo(instance.models.contact)
