@@ -4,7 +4,6 @@ const createError = require('http-errors');
 const { ServerError } = require('../errors');
 
 exports.accountMiddleware = async (req, res, next) => {
-
     if (req.headers && !req.headers.authorization) {
         res.status(401).json({success: false, message: 'You need to be authenticated'});
     } else {
@@ -95,9 +94,9 @@ exports.changePassword = async (req, res, next) => {
 }
 
 exports.quickTransaction = async(req, res, next) => {
-    const {id, cibleId, userId, sum} = req.body
+    const {id, receiverId, userId, sum} = req.body
     try{
-        const exchange = await accountService.quickTransaction(id, cibleId, userId, sum)
+        const exchange = await accountService.quickTransaction(id, receiverId, userId, sum)
         if(exchange){
             return res.status(200).json({success: true, exchange})
         }

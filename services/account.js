@@ -120,10 +120,10 @@ exports.changePassword = async (id, userId, password, newPassword) => {
     }
 }
 
-exports.quickTransaction = async (id, cibleId, userId, sum) => {
+exports.quickTransaction = async (id, receiverId, userId, sum) => {
     const account= await this.getAccountById(id)
-    const cibleAccount= await this.getAccountById(cibleId)
-    if(!account){
+    const receiverAccount= await this.getAccountById(receiverId)
+    if(!account || !receiverAccount){
         throw new NotFound("this account doesn't exist")
     }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
@@ -132,9 +132,9 @@ exports.quickTransaction = async (id, cibleId, userId, sum) => {
         if(sum>account.balance){
             throw new BadRequest("you don't have enough money")
         }
-        cibleSum = cibleAccount.balance+sum
-        cibleAccount.update({
-            balance: cibleSum
+        receiversum = receiverAccount.balance+sum
+        receiverAccount.update({
+            balance: receiversum
         })
         sum = account.balance-sum
         account.update({
