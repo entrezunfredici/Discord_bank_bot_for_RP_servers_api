@@ -1,4 +1,5 @@
 const { account } = require('../models')
+const moneyExchangesService = require('./moneyExchange')
 const bcrypt = require('bcrypt')
 const passwords = require('./passwords')
 const jwt = require('jsonwebtoken')
@@ -61,7 +62,7 @@ exports.accountLogin = async (userId, id, password) => {
     }
 }
 
-exports.changeBalance = async (id, userId, sum, type) => {
+exports.changeBalance = async (id, userId, amount, type) => {
     const account= await this.getAccountById(id)
     if(!account){
         throw new NotFound("this account doesn't exist")
@@ -71,18 +72,18 @@ exports.changeBalance = async (id, userId, sum, type) => {
     if(writeRights){
         switch(type){
             case "withdrawal":
-                if(sum>account.balance){
+                if(amount>account.balance){
                     throw new BadRequest("you don't have enough money")
                 }
-                sum = account.balance-sum 
+                amount = account.balance-amount 
                 account.update({
-                    balance: sum
+                    balance: amount
                 })
                 break
             case "payment":
-                sum += account.balance
+                amount += account.balance
                 account.update({
-                    balance: sum
+                    balance: amount
                 })
                 break
             default:
@@ -120,7 +121,7 @@ exports.changePassword = async (id, userId, password, newPassword) => {
     }
 }
 
-exports.quickTransaction = async (id, receiverId, userId, sum) => {
+exports.quickTransaction = async (id, name, reason, receiverId, userId, amount) => {
     const account= await this.getAccountById(id)
     const receiverAccount= await this.getAccountById(receiverId)
     if(!account || !receiverAccount){
@@ -129,16 +130,23 @@ exports.quickTransaction = async (id, receiverId, userId, sum) => {
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
     writeRights=true
     if(writeRights){
-        if(sum>account.balance){
+        if(amount>account.balance){
             throw new BadRequest("you don't have enough money")
         }
-        receiverAmount = receiverAccount.balance+sum
+        if(!name){
+            name="payment to "+receiverAccount.beneficiaryName
+        }
+        if(!reason){
+            reason=""
+        }
+        moneyExchangesService.addMoneyExchange(name, reason, Date(), amount, id, receiverId)
+        receiverAmount = receiverAccount.balance+amount
         receiverAccount.update({
             balance: receiverAmount
         })
-        sum = account.balance-sum
+        amount = account.balance-amount
         account.update({
-            balance: sum
+            balance: amount
         })
     }else{
         throw new NotLogged("you haven't access rights")

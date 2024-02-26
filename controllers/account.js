@@ -55,7 +55,6 @@ exports.addAccount = async (req, res, next) => {
 
 exports.accountLogin = async (req, res, next) => {
     const {userId, id, password} = req.body
-
     try{
         const token = await accountService.accountLogin(userId, id, password)
         if(token){
@@ -94,9 +93,9 @@ exports.changePassword = async (req, res, next) => {
 }
 
 exports.quickTransaction = async(req, res, next) => {
-    const {id, receiverId, userId, sum} = req.body
+    const {id, name, reason, receiverId, userId, sum} = req.body
     try{
-        const exchange = await accountService.quickTransaction(id, receiverId, userId, sum)
+        const exchange = await accountService.quickTransaction(id, name, reason, receiverId, userId, sum)
         if(exchange){
             return res.status(200).json({success: true, exchange})
         }
