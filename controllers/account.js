@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const accountService = require('../services/account')
+const moneyExchangesService = require('../services/moneyExchange')
 const createError = require('http-errors');
 const { ServerError } = require('../errors');
 
@@ -37,6 +38,24 @@ exports.getAccountById = async (req, res, next)  => {
         res.json({success: true, data: account})
     }else{
         next(createError(404, "this bank account doesn't exist"))
+    }
+}
+
+exports.getExpenses = async (req, res, next) => {
+    const expences = await moneyExchangesService.getMoneyExchangeBySenderId(req.params.Id)
+    if(expences){
+        res.json({success: true, data: expences})
+    }else{
+        next(createError(404, "you didn't spend any money"))
+    }
+}
+
+exports.getPaiments = async (req, res, next) => {
+    const paiments = await moneyExchangesService.getMoneyExchangeByReceiverId(req.params.Id)
+    if(paiments){
+        res.json({success: true, data: paiments})
+    }else{
+        next(createError(404, "you haven't earned any money"))
     }
 }
 
@@ -122,3 +141,4 @@ exports.deleteAccountsBybeneficiaryName = async (req, res, next) => {
         return next(createError(e.statusCode, e.message))
     }
 }
+//to do merge avec le main et creer la branche des droits

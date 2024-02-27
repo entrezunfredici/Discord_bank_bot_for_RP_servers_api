@@ -5,6 +5,10 @@ accountController = require('../controllers/account')
 router.get('/beneficiaryName=:beneficiaryName', accountController.getAccountBybeneficiaryName);
 //route pour obtennir un compte via l'id du compte
 router.get('/Id=:Id', accountController.getAccountById);
+//route pour obtennir un compte via l'id du compte
+router.get('/expenses/Id=:Id', accountController.getExpenses);
+//route pour obtennir un compte via l'id du compte
+router.get('/paiments/Id=:Id', accountController.getPaiments);
 //route pour se connecter
 router.post('/login', accountController.accountLogin);
 //route pour ajouter un compte
