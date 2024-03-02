@@ -30,6 +30,9 @@ app.use('/account', accountRouter)
 //router pour les contacts
 const contactRouter = require('./routers/contact')
 app.use('/contact', contactRouter)
+//routeur pour les droits
+const accessRightsRouter = require('./routers/accessRights')
+app.use('/accessRights', accessRightsRouter)
 //router pour les payments réguliers
 const regularMoneyExchangesRouter = require('./routers/regularMoneyExchanges')
 app.use('/regularMoneyExchange', regularMoneyExchangesRouter)

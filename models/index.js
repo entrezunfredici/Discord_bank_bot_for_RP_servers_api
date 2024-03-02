@@ -12,6 +12,7 @@ module.exports = {
     model: require('./model')(instance)*/
     account: require('./account')(instance),
     contact: require('./contact')(instance),
+    accessRights: require('./accessRights')(instance),
     moneyExchange: require('./moneyExchange')(instance),
     regularMoneyExchanges: require('./regularMoneyExchanges')(instance)
 }
