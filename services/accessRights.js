@@ -2,7 +2,7 @@ const { accessRights } = require('../models')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
 exports.getRights = (userName, accountId) => {
-    return accessRights.findAll({
+    return accessRights.findOne({
         where:{
             userName, accountId
         }
@@ -14,12 +14,12 @@ exports.editRights = async (userName, accountId, readRight, writeRight, createRi
         return new BadRequest("error")
     }else{
         const rights = await this.getRights(userName, accountId)
-        if(rights!=0){
+        if(rights){
             rights.update({
                 readRight: readRight,
                 writeRight: writeRight,
                 createRight: createRight,
-                deleteRight: deleteRight,
+                deleteRight: deleteRight
             })
             return rights
         }else{
