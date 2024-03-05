@@ -37,7 +37,6 @@ exports.contactMiddleware = async (req, res, next) => {
 
 exports.register = async (req, res, next) => {
     const {username, password, role} = req.body
-
     try {
         const contact = await contactService.addContact(username, password, role)
         if (!contact) {

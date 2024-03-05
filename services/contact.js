@@ -1,5 +1,6 @@
 const { contact } = require('../models')
 const accountService = require('./account')
+const accessRightsService = require('./accessRights')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
@@ -13,14 +14,16 @@ exports.getContactByUsername = async (username) => {
     return await contact.findOne({
         where: {
             username
-        }
+        },
+        attributes: {exclude: ['password']}
     })
 }
 
 exports.addContact = async (username, password, role) => {
     const existingContact = await this.getContactByUsername(username)
+    constructorName="!_!/C/C/P/F/C/R/0/A/C/!_!ContactConstrctrutorParametreForCreateRights0fAccountConstrutor!_!"
     if(username.length <= 2){
-        throw new BadRequest("Username must be at least 3 characters long")
+        throw new BadRequest("Username must be at least 2 characters long")
     }
     if (existingContact) {
         throw new BadRequest('Contact already exists')
@@ -31,7 +34,9 @@ exports.addContact = async (username, password, role) => {
     if(password.length <= 10){
         throw new BadRequest("Password must be at least 10 characters long")
     }
-    accountService.addAccount(username, password, 10) 
+    await accessRightsService.editRights(constructorName,-1,true,true,true,true)
+    await accountService.addAccount(constructorName, username, password, 10) 
+    await accessRightsService.deleteRights(constructorName,-1)
     return bcrypt.hash(password, 10).then((hash) => {
         return contact.create({username, password: hash, role})
     }).catch((e) => {
