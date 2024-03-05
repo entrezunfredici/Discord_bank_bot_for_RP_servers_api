@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const accountService = require('../services/account')
 const moneyExchangesService = require('../services/moneyExchange')
+const accessRightsService = require('../services/accessRights')
 const createError = require('http-errors');
 const { ServerError } = require('../errors');
 
@@ -60,12 +61,13 @@ exports.getPaiments = async (req, res, next) => {
 }
 
 exports.addAccount = async (req, res, next) => {
-    const {beneficiaryName, password, balance} = req.body
+    const {creatorName, beneficiaryName, password, balance} = req.body
     try {
-        const account = await accountService.addAccount(beneficiaryName, password, balance)
+        const account = await accountService.addAccount(creatorName, beneficiaryName, password, balance)
         if (!account) {
             throw new ServerError('cannot create this account')
         }
+        accessRightsService.editRights(beneficiaryName, account.id, true, true, false, false)
         return res.status(201).json({success: true, account})
     } catch(e) {
         return next(createError(e.statusCode, e.message))
@@ -73,9 +75,9 @@ exports.addAccount = async (req, res, next) => {
 }
 
 exports.accountLogin = async (req, res, next) => {
-    const {userId, id, password} = req.body
+    const {userName, id, password} = req.body
     try{
-        const token = await accountService.accountLogin(userId, id, password)
+        const token = await accountService.accountLogin(userName, id, password)
         if(token){
             return res.status(200).json({success: true, token})
         }
@@ -86,9 +88,9 @@ exports.accountLogin = async (req, res, next) => {
 }
 
 exports.accountBalance = async (req, res, next) => {
-    const {id, userId, sum, type} = req.body
+    const {id, userName, sum, type} = req.body
     try{
-        const change = await accountService.changeBalance(id, userId, sum, type)
+        const change = await accountService.changeBalance(id, userName, sum, type)
         if(change){
             return res.status(200).json({success: true, change})
         }
@@ -99,9 +101,9 @@ exports.accountBalance = async (req, res, next) => {
 }
 
 exports.changePassword = async (req, res, next) => {
-    const {id, userId, password, newPassword} = req.body
+    const {id, userName, password, newPassword} = req.body
     try{
-        const change = await accountService.changePassword(id, userId, password, newPassword)
+        const change = await accountService.changePassword(id, userName, password, newPassword)
         if(change){
             return res.status(200).json({success: true, change})
         }
@@ -112,9 +114,9 @@ exports.changePassword = async (req, res, next) => {
 }
 
 exports.quickTransaction = async(req, res, next) => {
-    const {id, name, reason, receiverId, userId, sum} = req.body
+    const {id, name, reason, receiverId, userName, sum} = req.body
     try{
-        const exchange = await accountService.quickTransaction(id, name, reason, receiverId, userId, sum)
+        const exchange = await accountService.quickTransaction(id, name, reason, receiverId, userName, sum)
         if(exchange){
             return res.status(200).json({success: true, exchange})
         }
@@ -126,7 +128,7 @@ exports.quickTransaction = async(req, res, next) => {
 
 exports.deleteAccountById = async (req, res, next) => {
     try {
-        await accountService.deleteAccountById(req.params.Id,req.params.userId)
+        await accountService.deleteAccountById(req.params.Id,req.params.userName)
         res.status(200).send({success: true})
     } catch(e) {
         return next(createError(e.statusCode, e.message))

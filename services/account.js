@@ -1,5 +1,6 @@
 const { account } = require('../models')
 const moneyExchangesService = require('./moneyExchange')
+const accessRightsService = require('./accessRights')
 const bcrypt = require('bcrypt')
 const passwords = require('./passwords')
 const jwt = require('jsonwebtoken')
@@ -23,10 +24,12 @@ exports.getAccountById = async (id) => {
     })
 }
 
-exports.addAccount = async (beneficiaryName, password, balance) => {
-    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de creer C)
-    createRights=true
-    if(createRights){
+exports.addAccount = async (creatorName, beneficiaryName, password, balance) => {
+    const rights= await accessRightsService.getRights(creatorName,-1)
+    if(!rights){
+        throw new NotFound("this rights doesn't exist")
+    }
+    if(rights.createRight){
         if(!balance){
             balance=0
         }
@@ -44,14 +47,17 @@ exports.addAccount = async (beneficiaryName, password, balance) => {
 }
 
 //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire R)
-exports.accountLogin = async (userId, id, password) => {
+exports.accountLogin = async (userName, id, password) => {
     const account = await this.getAccountById(id)
+    const rights= await accessRightsService.getRights(userName,id)
     if(!account){
         throw new NotFound("identifier or password are invalid")
     }
+    if(!rights){
+        throw new NotFound("this rights doesn't exist")
+    }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire R)
-    readRights=true
-    if(readRights){
+    if(rights.readRight){
         const verifiedConnection = await bcrypt.compare(password, account.password)
         if (!verifiedConnection) {
             throw new NotLogged('password incorrect for username')
@@ -62,14 +68,17 @@ exports.accountLogin = async (userId, id, password) => {
     }
 }
 
-exports.changeBalance = async (id, userId, amount, type) => {
+exports.changeBalance = async (id, userName, amount, type) => {
     const account= await this.getAccountById(id)
+    const rights= await accessRightsService.getRights(userName,-1)
     if(!account){
         throw new NotFound("this account doesn't exist")
     }
+    if(!rights){
+        throw new NotFound("this rights doesn't exist")
+    }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
-    writeRights=true
-    if(writeRights){
+    if(rights.writeRight){
         switch(type){
             case "withdrawal":
                 if(amount>account.balance){
@@ -95,14 +104,17 @@ exports.changeBalance = async (id, userId, amount, type) => {
     return account
 }
 
-exports.changePassword = async (id, userId, password, newPassword) => {
+exports.changePassword = async (id, userName, password, newPassword) => {
     const account= await this.getAccountById(id)
+    const rights= await accessRightsService.getRights(userName,id)
     if(!account){
         throw new NotFound("this account doesn't exist")
     }
+    if(!rights){
+        throw new NotFound("this rights doesn't exist")
+    }
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
-    writeRights=true
-    if(writeRights && bcrypt.compare(password, account.password)){
+    if(rights.writeRight && bcrypt.compare(password, account.password)){
         console.log(newPassword)
         return account.update({newPassword})
         if(passwords.notePassword(newPassword) < 1){
@@ -121,15 +133,17 @@ exports.changePassword = async (id, userId, password, newPassword) => {
     }
 }
 
-exports.quickTransaction = async (id, name, reason, receiverId, userId, amount) => {
+exports.quickTransaction = async (id, name, reason, receiverId, userName, amount) => {
     const account= await this.getAccountById(id)
     const receiverAccount= await this.getAccountById(receiverId)
+    const rights= await accessRightsService.getRights(userName,id)
     if(!account || !receiverAccount){
         throw new NotFound("this account doesn't exist")
     }
-    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
-    writeRights=true
-    if(writeRights){
+    if(!rights){
+        throw new NotFound("this rights doesn't exist")
+    }
+    if(rights.readRight && rights.writeRight){
         if(amount>account.balance){
             throw new BadRequest("you don't have enough money")
         }
@@ -154,11 +168,13 @@ exports.quickTransaction = async (id, name, reason, receiverId, userId, amount) 
     return account
 }
 
-exports.deleteAccountById= async (id, userid) => {
+exports.deleteAccountById= async (id, userName) => {
     const verifAccount = await this.getAccountById(id)
-    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de supression D)
-    deleteRights=true
-    if(deleteRights){
+    const rights= await accessRightsService.getRights(userName,-1)
+    if(!rights){
+        throw new NotFound("this rights doesn't exist")
+    }
+    if(rights.deleteRight){
         if(verifAccount){
             return account.destroy({
                 where: {
