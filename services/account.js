@@ -1,12 +1,13 @@
 const { account } = require('../models')
 const bcrypt = require('bcrypt')
+const contactService = require('./contact')
 const jwt = require('jsonwebtoken')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
-exports.getAccountByBeneficiaryId = async (beneficiaryId) => {
+exports.getAccountBybeneficiaryName = async (beneficiaryName) => {
     return account.findAll({
         where:{
-            beneficiaryId
+            beneficiaryName
         }
     })
 }
@@ -19,7 +20,7 @@ exports.getAccountById = async (id) => {
     })
 }
 
-exports.addAccount = async (beneficiaryId, password, balance) => {
+exports.addAccount = async (beneficiaryName, password, balance) => {
     //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de creer C)
     createRights=true
     if(createRights){
@@ -30,7 +31,7 @@ exports.addAccount = async (beneficiaryId, password, balance) => {
             throw new BadRequest("password must be at least 10 characters long")
         }
         return bcrypt.hash(password, 10).then((hash) => {
-            return account.create({beneficiaryId, password: hash, balance})
+            return account.create({beneficiaryName, password: hash, balance})
         }).catch((e) => {
             throw new ServerError(e.message)
         })
@@ -136,10 +137,10 @@ exports.deleteAccountByID = async (id, userid) => {
     }
 }
 
-exports.deleteAccountsByBeneficiaryID = async (beneficiaryID) => {
+exports.deleteAccountsBybeneficiaryName = async (beneficiaryName) => {
     return account.destroy({
         where: {
-            beneficiaryID
+            beneficiaryName
         }
     })
 }
