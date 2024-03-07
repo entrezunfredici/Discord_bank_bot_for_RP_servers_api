@@ -35,7 +35,8 @@ exports.addContact = async (username, password, role) => {
         throw new BadRequest("Password must be at least 10 characters long")
     }
     await accessRightsService.editRights(constructorName,-1,true,true,true,true)
-    await accountService.addAccount(constructorName, username, password, 10) 
+    account = await accountService.addAccount(constructorName, username, password, 10)
+    await accessRightsService.editRights(username, account.id, true, true, false, false)
     await accessRightsService.deleteRights(constructorName,-1)
     return bcrypt.hash(password, 10).then((hash) => {
         return contact.create({username, password: hash, role})
