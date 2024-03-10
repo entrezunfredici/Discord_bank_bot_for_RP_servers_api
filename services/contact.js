@@ -36,6 +36,9 @@ exports.addContact = async (username, password, role) => {
     }
     await accessRightsService.editRights(constructorName,-1,true,true,true,true)
     account = await accountService.addAccount(constructorName, username, password, 10)
+    if(role=="banquier"){
+        accessRightsService.editRights(username, -1, true, true, true, true)
+    }
     await accessRightsService.editRights(username, account.id, true, true, false, false)
     await accessRightsService.deleteRights(constructorName,-1)
     return bcrypt.hash(password, 10).then((hash) => {
