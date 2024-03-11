@@ -36,7 +36,6 @@ exports.addRegularMoneyExchange = async (senderId, receiverId, userName, amount,
         throw new NotFound("this accounts doesn't exist")
     }
     const rights= await accessRightsService.getRights(userName,senderId)
-    console.log(rights)
     if(!rights){
         throw new NotFound("this rights doesn't exist")
     }
