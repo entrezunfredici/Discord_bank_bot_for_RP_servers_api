@@ -67,12 +67,19 @@ exports.loginContact = async (username, password) => {
     return token
 }
 
-// exports.updateContact = async (username, password, role) => {
-//     const contact = await this.getContactByUsername(username)
-//     if (!contact) {
-//         throw new NotFound('No user found for username:' + username)
-//     }
-// }
+exports.updateContact = async (adminName, username, password, role) => {
+    const contact = await this.getContactByUsername(username)
+    const admin = await this.getContactByUsername(adminName)
+    if(admin.role!="admin"){
+        throw new BadRequest('you havent this rights')
+    }
+    if (!contact) {
+        throw new NotFound('No user found for username:' + username)
+    }
+    return contact.update({
+        role: role
+    })
+}
 
 exports.deleteContactByUsername = async (username) => {
     const verifContact = await this.getContactByUsername(username)

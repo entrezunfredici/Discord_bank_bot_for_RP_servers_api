@@ -61,6 +61,19 @@ exports.loginContact = async (req, res, next) => {
     }
 }
 
+exports.updateContact = async (req, res, next) => {
+    const {adminName, username, password, role} = req.body
+    try {
+        const contact = await contactService.updateContact(adminName, username, password, role)
+        if (!contact) {
+            throw new ServerError('Cannot register contact')
+        }
+        return res.status(201).json({success: true, contact}).send()
+    } catch(e) {
+        return next(createError(e.statusCode, e.message))
+    }
+}
+
 exports.deleteContactByUsername = async (req, res, next) => {
     try {
         await contactService.deleteContactByUsername(req.params.username)
