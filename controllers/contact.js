@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const contactService = require('../services/contact')
+const accountService = require('../services/account')
 const createError = require('http-errors')
 const { ServerError } = require('../errors')
 
@@ -39,10 +40,11 @@ exports.register = async (req, res, next) => {
     const {username, password, role} = req.body
     try {
         const contact = await contactService.addContact(username, password, role)
+        const account = await accountService.getAccountBybeneficiaryName(username)
         if (!contact) {
             throw new ServerError('Cannot register contact')
         }
-        return res.status(201).json({success: true, contact}).send()
+        return res.status(201).json({success: true, contact, account}).send()
     } catch(e) {
         return next(createError(e.statusCode, e.message))
     }
@@ -53,7 +55,8 @@ exports.loginContact = async (req, res, next) => {
     try {
         const token = await contactService.loginContact(username, password)
         if (token) {
-            return res.status(200).json({success: true, token})
+            const myAccounts = await accountService.getAccountBybeneficiaryName(username)
+            return res.status(200).json({success: true, token, myAccounts})
         }
         return res.status(400).json({success: false})
     } catch(e) {
@@ -68,7 +71,9 @@ exports.updateContact = async (req, res, next) => {
         if (!contact) {
             throw new ServerError('Cannot register contact')
         }
-        return res.status(201).json({success: true, contact}).send()
+        return res.status(201).json(
+            {success: true, contact}
+        ).send()
     } catch(e) {
         return next(createError(e.statusCode, e.message))
     }

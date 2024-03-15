@@ -25,7 +25,7 @@ exports.addContact = async (username, password, role) => {
     if(username.length <= 2){
         throw new BadRequest("Username must be at least 2 characters long")
     }
-    if (existingContact) {
+    if (existingContact || (username==constructorName)) {
         throw new BadRequest('Contact already exists')
     }
     if(!((role=="client")||(role=="banquier")||(role=="entreprise")||(role=="admin"))) {
@@ -76,8 +76,10 @@ exports.updateContact = async (adminName, username, password, role) => {
     if (!contact) {
         throw new NotFound('No user found for username:' + username)
     }
-    return contact.update({
-        role: role
+    return bcrypt.hash(password, 10).then((hash) => {
+        return contact.update({username, password: hash, role})
+    }).catch((e) => {
+        throw new ServerError('Error when performing bcrypt: ', e.message)
     })
 }
 
@@ -93,8 +95,6 @@ exports.deleteContactByUsername = async (username) => {
         throw new NotFound("This account doesn't exist")
     }
 }
-
-
 
     //TODO: créer Update plus tard !
     //TODO: Rigths
