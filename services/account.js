@@ -32,7 +32,7 @@ exports.addAccount = async (creatorName, beneficiaryName, password, balance) => 
         if(!balance){
             balance=0
         }
-        if(passwords.notePassword(password) < 1){
+        if(await passwords.notePassword(password) < 5){
             throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
         }
         return bcrypt.hash(password, 10).then((hash) => {
@@ -111,21 +111,12 @@ exports.changePassword = async (id, userName, password, newPassword) => {
     }
     if(rights.writeRight && bcrypt.compare(password, account.password)){
         console.log(newPassword)
-        if(passwords.notePassword(newPassword) < 1){
+        if(await passwords.notePassword(newPassword) < 5){
             throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
         }
-        return account.update({newPassword})
         balance = account.balance
         return bcrypt.hash(password, 10).then((hash) => {
             return account.update({beneficiaryName: userName, password: hash, balance})
-        }).catch((e) => {
-            throw new ServerError(e.message)
-        })
-        return bcrypt.hash(newPassword, 10).then((hash) => {
-            console.log(hash)
-            return account.update({
-                password: hash
-            })
         }).catch((e) => {
             throw new ServerError(e.message)
         })

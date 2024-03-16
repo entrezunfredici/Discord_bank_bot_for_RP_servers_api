@@ -2,6 +2,7 @@ const { contact } = require('../models')
 const accountService = require('./account')
 const accessRightsService = require('./accessRights')
 const bcrypt = require('bcrypt')
+const passwords = require('./passwords')
 const jwt = require('jsonwebtoken')
 const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
@@ -31,8 +32,10 @@ exports.addContact = async (username, password, role) => {
     if(!((role=="client")||(role=="banquier")||(role=="entreprise")||(role=="admin"))) {
         throw new BadRequest('Need an existing role')
     }
-    if(password.length <= 10){
-        throw new BadRequest("Password must be at least 10 characters long")
+    console.log(password)
+    console.log(passwords.notePassword(password))
+    if(await passwords.notePassword(password) < 5){
+        throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
     }
     await accessRightsService.editRights(constructorName,-1,true,true,true,true)
     account = await accountService.addAccount(constructorName, username, password, 10)
