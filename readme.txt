@@ -16,3 +16,6 @@
 ⇒ to install dependencies quickly and easily:
      Launch the dependencies installer script with the command: → " py -3 .\dependencies-install-script.py "
       Python is required to use this script you can download it here → https://www.python.org/downloads/
+
+⇒ vous retrouverez une collection postman pour tester l'api dans le dossier ci dessous:
+     → https://1drv.ms/f/s!AuLuxaFrfigQo6olcZgWGp68e5IvXg?e=m5359a
