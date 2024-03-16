@@ -12,6 +12,12 @@ tags:
     description: use accounts and transactions
   - name: account
     description: contains money of contacts
+  - name: acessRights
+    description: define access acessRights
+  # - name: moneyExchanges
+  #   description: archive the money exchanges
+  # - name: regularMoneyExchanges
+  #   description: make money exchanges at regular intervals 
 
 paths:
   #contact
@@ -113,11 +119,11 @@ paths:
   #         "404":
   #           description: NotFound
 
-#accounts
-  /accounts/{beneficiaryName}:
+  #accounts
+  /accounts/beneficiaryName={beneficiaryName}:
     get:
-      summary: Récupérer les comptes par ID de bénéficiaire
-      operationId: getAccountByBeneficiaryId
+      summary: Récupérer les comptes par le nom du du bénéficiaire
+      operationId: getAccountByBeneficiaryName
       parameters:
         - name: beneficiaryName
           in: path
@@ -146,7 +152,7 @@ paths:
         '200':
           description: Succès
 
-  /accounts/{id}:
+  /accounts/Id={id}:
     get:
       summary: Récupérer un compte par ID
       operationId: getAccountById
@@ -310,6 +316,94 @@ paths:
         '400':
           description: Mauvaise requête
 
+  #acessRights
+  /accessRights/userName={userName}&accountId={accountId}:
+    get:
+      summary: Récuperer les droits d'un utilisateur sur un compte
+      operationId: getRights
+      parameters:
+        - name: userName
+          in: path
+          description: nom d'utilisateur'
+          required: true
+          schema:
+            type: string
+        - name: accountId
+          in: path
+          description: id du compte bancaire
+          required: true
+          schema:
+            type: int
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accessRights'
+        '404':
+          description: no rights
+    delete:
+      summary: Supprimer  les droits d'un utilisateur sur un compte
+      operationId: deleteRights
+      parameters:
+        - name: userName
+          in: path
+          description: nom d'utilisateur'
+          required: true
+          schema:
+            type: string
+        - name: accountId
+          in: path
+          description: id du compte bancaire
+          required: true
+          schema:
+            type: int
+      responses:
+        '200':
+          description: Succès
+  
+  /accessRights/editRights:
+    post:
+      summary: creer ou modifier des droits
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userName, accountId]
+              properties:
+                userName:
+                  type: string
+                accountId:
+                  type: integer
+                readRight:
+                  type: boolean
+                writeRight:
+                  type: boolean
+                createRight:
+                  type: boolean
+                deleteRight:
+                  type: boolean
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  account:
+                    $ref: '#/components/schemas/accessRights'
+        '400':
+          description: userName, accountId and rights are necessary
+        '500':
+          description: cannot edit this rights
+
+
 #components
 components:
   schemas:
@@ -353,4 +447,32 @@ components:
         - password
         - beneficiaryName
         - balance
+    accessRights:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        userName:
+          type: string
+          example: "Michel"
+        accountId:
+          type: integer
+          example: 1
+        readRight:
+          type: boolean
+          example: true
+        writeRight:
+          type: boolean
+          example: true
+        createRight:
+          type: boolean
+          example: false
+        deleteRight:
+          type: boolean
+          example: false
+      required:
+        - id
+        - userName
+        - accountId
 
