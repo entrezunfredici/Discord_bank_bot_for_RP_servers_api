@@ -6,7 +6,7 @@ const { NotFound, NotLogged, BadRequest, ServerError } = require('../errors')
 
 
 exports.getContact = async () => {
-    return await contact.findAll({attribute: {exclude: ['password']}})
+    return await contact.findAll({ attributes: {exclude: ['password']} })
 }
 
 exports.getContactByUsername = async (username) => {
@@ -53,14 +53,16 @@ exports.loginContact = async (username, password) => {
     const token = jwt.sign({
         data: {id: contact.id, username: contact.username}
     }, process.env.SECRET, {
-            expiresIn: '30s'
+            expiresIn: '30m'
         })
     return token
 }
 
 // exports.updateContact = async (username, password, role) => {
 //     const contact = await this.getContactByUsername(username)
-//     if 
+//     if (!contact) {
+//         throw new NotFound('No user found for username:' + username)
+//     }
 // }
 
 exports.deleteContactByUsername = async (username) => {
