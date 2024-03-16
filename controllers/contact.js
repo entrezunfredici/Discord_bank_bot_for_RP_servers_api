@@ -20,21 +20,23 @@ exports.getContactByUsername = async (req, res, next) => {
 
 exports.contactMiddleware = async (req, res, next) => {
     if (req.headers && !req.headers.authorization) {
-        res.status(401).json({success: false, message: 'You need to be authenticated'})
+        res.status(401).json({success: false, message: 'You need to be authenticated'});
     } else {
-        const token = req.headers.authorization.split('')[1]
+        const token = req.headers.authorization.split(' ')[1];
         try {
-            const decodedToken = await jwt.verify(token, process.env.SECRET)
+            const decodedToken = await jwt.verify(token, process.env.SECRET);
             if (decodedToken) {
-                next()
+                // We can store in req.locals = {} some info about the user to propagate into next controller
+                next();
             } else {
                 next(createError(401, 'Authentication is no more valid'))
             }
         } catch(e) {
-            next(e)
+            next(e);
         }
     }
 }
+
 
 exports.register = async (req, res, next) => {
     const {username, password, role} = req.body

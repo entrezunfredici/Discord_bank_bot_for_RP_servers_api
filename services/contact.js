@@ -19,6 +19,14 @@ exports.getContactByUsername = async (username) => {
     })
 }
 
+exports.getContactForLogIn = async (username) => {
+    return await contact.findOne({
+        where: {
+            username
+        }
+    })
+}
+
 exports.addContact = async (username, password, role) => {
     const existingContact = await this.getContactByUsername(username)
     constructorName="!_!/C/C/P/F/C/R/0/A/C/!_!ContactConstrctrutorParametreForCreateRights0fAccountConstrutor!_!"
@@ -49,21 +57,26 @@ exports.addContact = async (username, password, role) => {
 }
 
 exports.loginContact = async (username, password) => {
-    const contact = await this.getContactByUsername(username)
+    console.log(username)
+    console.log(password)
+    const contact = await this.getContactForLogIn(username)
     if (!contact) {
         throw new NotFound('No user found for username:' + username)
     }
-
+    console.log(contact.id)
     const verifiedContact = await bcrypt.compare(password, contact.password)
     if (!verifiedContact) {
         throw new NotLogged('Password incorrect for username')
     }
 
     const token = jwt.sign({
-        data: {id: contact.id, username: contact.username}
+        data: {id: contact.id, username: username}
     }, process.env.SECRET, {
-            expiresIn: '30m'
-        })
+        expiresIn: '30m'
+    });
+    if(!token){
+        throw new ServerError('failed to create token')
+    }
     return token
 }
 
