@@ -77,7 +77,6 @@ exports.changeBalance = async (id, userName, amount, type) => {
     if(!rights){
         throw new NotFound("this rights doesn't exist")
     }
-    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
     if(rights.writeRight){
         switch(type){
             case "withdrawal":
@@ -105,21 +104,26 @@ exports.changeBalance = async (id, userName, amount, type) => {
 }
 
 exports.changePassword = async (id, userName, password, newPassword) => {
-    const account= await this.getAccountById(id)
-    const rights= await accessRightsService.getRights(userName,id)
+    const account = await this.getAccountById(id)
+    const rights = await accessRightsService.getRights(userName,id)
     if(!account){
         throw new NotFound("this account doesn't exist")
     }
     if(!rights){
         throw new NotFound("this rights doesn't exist")
     }
-    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire et écrire W)
     if(rights.writeRight && bcrypt.compare(password, account.password)){
         console.log(newPassword)
-        return account.update({newPassword})
         if(passwords.notePassword(newPassword) < 1){
             throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
         }
+        return account.update({newPassword})
+        balance = account.balance
+        return bcrypt.hash(password, 10).then((hash) => {
+            return account.update({beneficiaryName: userName, password: hash, balance})
+        }).catch((e) => {
+            throw new ServerError(e.message)
+        })
         return bcrypt.hash(newPassword, 10).then((hash) => {
             console.log(hash)
             return account.update({

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const accountService = require('../services/account')
 const moneyExchangesService = require('../services/moneyExchange')
+const regularMoneyExchangesService = require('../services/regularMoneyExchanges')
 const accessRightsService = require('../services/accessRights')
 const createError = require('http-errors');
 const { ServerError } = require('../errors');
@@ -78,8 +79,13 @@ exports.accountLogin = async (req, res, next) => {
     const {userName, id, password} = req.body
     try{
         const token = await accountService.accountLogin(userName, id, password)
+        const paiments = await moneyExchangesService.getMoneyExchangeByReceiverId(req.params.Id)
+        const expences = await moneyExchangesService.getMoneyExchangeBySenderId(req.params.Id)
+        const subscriptions = await regularMoneyExchangesService.getRegularMoneyExchangesBySenderId(req.params.Id)
+        const income = await regularMoneyExchangesService.getRegularMoneyExchangesByReceiverId(req.params.Id)
         if(token){
-            return res.status(200).json({success: true, token})
+            //return res.status(200).json({success: true, token, paiments, expences, subscriptions, income})
+            return res.status(200).json({success: true, token, paiments, expences})
         }
         return res.status(400).json({success: false})
     } catch(e) {
@@ -143,4 +149,3 @@ exports.deleteAccountsBybeneficiaryName = async (req, res, next) => {
         return next(createError(e.statusCode, e.message))
     }
 }
-//to do merge avec le main et creer la branche des droits
