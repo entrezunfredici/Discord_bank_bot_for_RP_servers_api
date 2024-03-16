@@ -79,13 +79,13 @@ exports.accountLogin = async (req, res, next) => {
     const {userName, id, password} = req.body
     try{
         const token = await accountService.accountLogin(userName, id, password)
-        const paiments = await moneyExchangesService.getMoneyExchangeByReceiverId(req.params.Id)
-        const expences = await moneyExchangesService.getMoneyExchangeBySenderId(req.params.Id)
-        const subscriptions = await regularMoneyExchangesService.getRegularMoneyExchangesBySenderId(req.params.Id)
-        const income = await regularMoneyExchangesService.getRegularMoneyExchangesByReceiverId(req.params.Id)
+        const account = await accountService.getAccountBybeneficiaryName(userName)
+        const paiments = await moneyExchangesService.getMoneyExchangeByReceiverId(id)
+        const expences = await moneyExchangesService.getMoneyExchangeBySenderId(id)
+        const subscriptions = await regularMoneyExchangesService.getRegularMoneyExchangesBySenderId(id)
+        const income = await regularMoneyExchangesService.getRegularMoneyExchangesByReceiverId(id)
         if(token){
-            //return res.status(200).json({success: true, token, paiments, expences, subscriptions, income})
-            return res.status(200).json({success: true, token, paiments, expences})
+            return res.status(200).json({success: true, account, paiments, expences, subscriptions, income})
         }
         return res.status(400).json({success: false})
     } catch(e) {

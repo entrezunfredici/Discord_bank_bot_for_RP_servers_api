@@ -28,5 +28,9 @@ module.exports = (instance) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        timeUnit: {
+            type: DataTypes.STRING,
+            allownull: false
+        }
     })
 }

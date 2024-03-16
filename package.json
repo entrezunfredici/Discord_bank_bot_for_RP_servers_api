@@ -11,12 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "express": "^4.18.2",
+    "express": "^4.18.3",
     "express-openapi-validator": "^5.1.6",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
-    "mysql2": "^3.9.1",
+    "mysql2": "^3.9.2",
+    "node": "^21.7.1",
+    "node-cron": "^3.0.3",
     "sequelize": "^6.37.1",
     "sqlite3": "^5.1.7"
   },

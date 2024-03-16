@@ -9,6 +9,6 @@ router.get('/receiverId=:receiverId', regularMoneyExchangesController.getRegular
 //route pour creer un echange régulier
 router.post('/add', regularMoneyExchangesController.addRegularMoneyExchange)
 //route pour supprimer un echange régulier
-router.delete('/id=:id&userid=:userid', regularMoneyExchangesController.deleteRegularMoneyExchangeById)
+router.delete('/id=:id&userName=:userName', regularMoneyExchangesController.deleteRegularMoneyExchangeById)
 
 module.exports = router;

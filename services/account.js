@@ -19,8 +19,7 @@ exports.getAccountById = async (id) => {
     return account.findOne({
         where:{
             id
-        },
-        attributes: { exclude: ['password'] }
+        }
     })
 }
 
@@ -46,7 +45,6 @@ exports.addAccount = async (creatorName, beneficiaryName, password, balance) => 
     }
 }
 
-//sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire R)
 exports.accountLogin = async (userName, id, password) => {
     const account = await this.getAccountById(id)
     const rights= await accessRightsService.getRights(userName,id)
@@ -56,7 +54,6 @@ exports.accountLogin = async (userName, id, password) => {
     if(!rights){
         throw new NotFound("this rights doesn't exist")
     }
-    //sera à améliorer lorsque les droits d'accés seront créés (nécéssitant droit de lire R)
     if(rights.readRight){
         const verifiedConnection = await bcrypt.compare(password, account.password)
         if (!verifiedConnection) {
