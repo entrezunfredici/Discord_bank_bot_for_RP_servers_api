@@ -32,8 +32,6 @@ exports.addContact = async (username, password, role) => {
     if(!((role=="client")||(role=="banquier")||(role=="entreprise")||(role=="admin"))) {
         throw new BadRequest('Need an existing role')
     }
-    console.log(password)
-    console.log(passwords.notePassword(password))
     if(await passwords.notePassword(password) < 5){
         throw new BadRequest("password must be at least 10 characters long, one Maj, one min, one number and one special character")
     }
