@@ -28,13 +28,14 @@ exports.getRegularMoneyExchangesByReceiverId = async (receiverId) => {
     })
 }
 
-exports.addRegularMoneyExchange = async (senderId, receiverId, userName, amount, startDate, timeRange, timeUnit) => {
-    if ((!amount) || (!startDate) || (!timeRange)) {
-        throw new BadRequest("amount, startDate and timeRanges are required")
+exports.addRegularMoneyExchange = async (senderId, receiverId, userName, amount, timeRange, timeUnit) => {
+    if ((!amount) || (!timeRange)) {
+        throw new BadRequest("amount, and timeRanges are required")
     }
     if(!(await accountService.getAccountById(senderId)) || !(await accountService.getAccountById(receiverId))){
         throw new NotFound("this accounts doesn't exist")
     }
+    console.log(timeUnit)
     const rights= await accessRightsService.getRights(userName,senderId)
     if(!rights){
         throw new NotFound("this rights doesn't exist")
@@ -44,35 +45,35 @@ exports.addRegularMoneyExchange = async (senderId, receiverId, userName, amount,
         cron.schedule(scheduleVar,()=>{
             accountService.quickTransaction(senderId, "unnamed", "no reason", receiverId, userName, amount)
         })
-        return regularMoneyExchanges.create({ senderId, receiverId, amount, startDate, timeRange, timeUnit })
+        return regularMoneyExchanges.create({ senderId, receiverId, amount, timeRange, timeUnit })
     }
     if(timeUnit=="hours"){
         const scheduleVar='1 */'+timeRange.toString()+' * * *'
         cron.schedule(scheduleVar,()=>{
             accountService.quickTransaction(senderId, "unnamed", "no reason", receiverId, userName, amount)
         })
-        return regularMoneyExchanges.create({ senderId, receiverId, amount, startDate, timeRange, timeUnit })
+        return regularMoneyExchanges.create({ senderId, receiverId, amount, timeRange, timeUnit })
     }
     if(timeUnit=="days"){
         const scheduleVar='1 1 */'+timeRange.toString()+' * *'
         cron.schedule(scheduleVar,()=>{
             accountService.quickTransaction(senderId, "unnamed", "no reason", receiverId, userName, amount)
         })
-        return regularMoneyExchanges.create({ senderId, receiverId, amount, startDate, timeRange, timeUnit })
+        return regularMoneyExchanges.create({ senderId, receiverId, amount, timeRange, timeUnit })
     }
     if(timeUnit=="mounth"){
         const scheduleVar='1 1 */'+timeRange.toString()+' * *'
         cron.schedule(scheduleVar,()=>{
             accountService.quickTransaction(senderId, "unnamed", "no reason", receiverId, userName, amount)
         })
-        return regularMoneyExchanges.create({ senderId, receiverId, amount, startDate, timeRange, timeUnit })
+        return regularMoneyExchanges.create({ senderId, receiverId, amount, timeRange, timeUnit })
     }
     if(timeUnit=="week"){
         const scheduleVar='* * * * 1'
         cron.schedule(scheduleVar,()=>{
             accountService.quickTransaction(senderId, "unnamed", "no reason", receiverId, userName, amount)
         })
-        return regularMoneyExchanges.create({ senderId, receiverId, amount, startDate, timeRange, timeUnit })
+        return regularMoneyExchanges.create({ senderId, receiverId, amount, timeRange, timeUnit })
     }
     throw new BadRequest("this time unit doesn't exist")
 }

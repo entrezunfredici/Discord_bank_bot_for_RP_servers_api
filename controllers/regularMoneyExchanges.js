@@ -29,10 +29,11 @@ exports.getRegularMoneyExchangesByReceiverId = async (req, res, next) => {
     }
 }
 
+//the start date feature could not be implemented in time
 exports.addRegularMoneyExchange = async (req,res,next) => {
-    const {senderId, receiverId, userName, amount, startDate, timeRange, timeUnit} = req.body
+    const {senderId, receiverId, userName, amount, timeRange, timeUnit} = req.body
     try {
-        const regularMoneyExchange = await regularMoneyExchangeService.addRegularMoneyExchange(senderId, receiverId, userName, amount, startDate, timeRange, timeUnit)
+        const regularMoneyExchange = await regularMoneyExchangeService.addRegularMoneyExchange(senderId, receiverId, userName, amount, timeRange, timeUnit)
         if(!regularMoneyExchange){
             throw new ServerError('cannot create this regular money exchange')
         }

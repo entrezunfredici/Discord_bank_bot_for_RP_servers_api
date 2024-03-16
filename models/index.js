@@ -16,4 +16,3 @@ module.exports = {
     moneyExchange: require('./moneyExchange')(instance),
     regularMoneyExchanges: require('./regularMoneyExchanges')(instance)
 }
-//instance.models.account.belongsTo(instance.models.contact)

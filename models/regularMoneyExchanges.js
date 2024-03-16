@@ -20,10 +20,6 @@ module.exports = (instance) => {
             type: DataTypes.FLOAT,
             allownull: false
         },
-        startDate: {
-            type: DataTypes.DATE,
-            allowNull: false
-        },
         timeRange: {
             type: DataTypes.INTEGER,
             allowNull: false
