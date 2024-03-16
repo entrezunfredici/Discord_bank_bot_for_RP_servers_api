@@ -19,6 +19,15 @@ exports.getAccountById = async (id) => {
     return account.findOne({
         where:{
             id
+        },
+        attributes: { exclude: ['password'] }
+    })
+}
+
+exports.getAccountByIdWithPassword = async (id) => {
+    return account.findOne({
+        where:{
+            id
         }
     })
 }
@@ -46,7 +55,8 @@ exports.addAccount = async (creatorName, beneficiaryName, password, balance) => 
 }
 
 exports.accountLogin = async (userName, id, password) => {
-    const account = await this.getAccountById(id)
+    const account = await this.getAccountByIdWithPassword(id)
+    const accountReturned = await this.getAccountById(id)
     const rights= await accessRightsService.getRights(userName,id)
     if(!account){
         throw new NotFound("identifier or password are invalid")
@@ -59,14 +69,14 @@ exports.accountLogin = async (userName, id, password) => {
         if (!verifiedConnection) {
             throw new NotLogged('password incorrect for username')
         }
-        return account
+        return accountReturned
     }else{
         throw new NotFound("you haven't access rights")
     }
 }
 
 exports.changeBalance = async (id, userName, amount, type) => {
-    const account= await this.getAccountById(id)
+    const account = await this.getAccountByIdWithPassword(id)
     const rights= await accessRightsService.getRights(userName,-1)
     if(!account){
         throw new NotFound("this account doesn't exist")
@@ -97,7 +107,8 @@ exports.changeBalance = async (id, userName, amount, type) => {
     }else{
         throw new NotLogged("you haven't access rights")
     }
-    return account
+    const accountReturned = await this.getAccountById(id)
+    return accountReturned
 }
 
 exports.changePassword = async (id, userName, password, newPassword) => {
@@ -126,7 +137,7 @@ exports.changePassword = async (id, userName, password, newPassword) => {
 }
 
 exports.quickTransaction = async (id, name, reason, receiverId, userName, amount) => {
-    const account= await this.getAccountById(id)
+    const account = await this.getAccountByIdWithPassword(id)
     const receiverAccount= await this.getAccountById(receiverId)
     const rights= await accessRightsService.getRights(userName,id)
     if(!account || !receiverAccount){
@@ -157,7 +168,8 @@ exports.quickTransaction = async (id, name, reason, receiverId, userName, amount
     }else{
         throw new NotLogged("you haven't access rights")
     }
-    return account
+    const accountReturned = await this.getAccountById(id)
+    return accountReturned
 }
 
 exports.deleteAccountById= async (id, userName) => {

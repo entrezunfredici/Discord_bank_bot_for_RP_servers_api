@@ -44,7 +44,8 @@ exports.register = async (req, res, next) => {
         if (!contact) {
             throw new ServerError('Cannot register contact')
         }
-        return res.status(201).json({success: true, contact, account}).send()
+        const contactReturned = await contactService.getContactByUsername(username, password, role)
+        return res.status(201).json({success: true, contactReturned, account}).send()
     } catch(e) {
         return next(createError(e.statusCode, e.message))
     }
@@ -71,8 +72,9 @@ exports.updateContact = async (req, res, next) => {
         if (!contact) {
             throw new ServerError('Cannot register contact')
         }
+        const contactReturned = await contactService.getContactByUsername(username)
         return res.status(201).json(
-            {success: true, contact}
+            {success: true, contactReturned}
         ).send()
     } catch(e) {
         return next(createError(e.statusCode, e.message))

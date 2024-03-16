@@ -20,6 +20,14 @@ exports.getContactByUsername = async (username) => {
     })
 }
 
+exports.getContactByUsernameWithPassword = async (username) => {
+    return await contact.findOne({
+        where: {
+            username
+        }
+    })
+}
+
 exports.addContact = async (username, password, role) => {
     const existingContact = await this.getContactByUsername(username)
     constructorName="!_!/C/C/P/F/C/R/0/A/C/!_!ContactConstrctrutorParametreForCreateRights0fAccountConstrutor!_!"
@@ -50,7 +58,7 @@ exports.addContact = async (username, password, role) => {
 }
 
 exports.loginContact = async (username, password) => {
-    const contact = await this.getContactByUsername(username)
+    const contact = await this.getContactByUsernameWithPassword(username)
     if (!contact) {
         throw new NotFound('No user found for username:' + username)
     }
@@ -60,10 +68,12 @@ exports.loginContact = async (username, password) => {
         throw new NotLogged('Password incorrect for username')
     }
 
+    console.log(contact.id)
+    console.log(contact.username)
     const token = jwt.sign({
         data: {id: contact.id, username: contact.username}
     }, process.env.SECRET, {
-            expiresIn: '30m'
+            expiresIn: '30s'
         })
     return token
 }
