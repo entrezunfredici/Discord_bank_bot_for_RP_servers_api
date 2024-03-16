@@ -18,4 +18,4 @@
       Python is required to use this script you can download it here → https://www.python.org/downloads/
 
 ⇒ vous retrouverez une collection postman pour tester l'api dans le dossier ci dessous:
-     → https://1drv.ms/f/s!AuLuxaFrfigQo6olcZgWGp68e5IvXg?e=m5359a
+     → https://1drv.ms/f/s!AuLuxaFrfigQo6ojTTqf-6xC6qcOFw?e=5GjweS
