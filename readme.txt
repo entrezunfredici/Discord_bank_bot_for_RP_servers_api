@@ -12,3 +12,7 @@
     ⇒service: this folder contains all services of this api, every JS file saved in this folder corresponds to a service
     ⇒router: this folder contains all router of this api, every JS file saved in this folder corresponds to a router.
     ⇒controllers: this folder contains all controllers of this api, every JS file saved in this folder corresponds to a controller.
+
+⇒ to install dependencies quickly and easily:
+     Launch the dependencies installer script with the command: → " py -3 .\dependencies-install-script.py "
+      Python is required to use this script you can download it here → https://www.python.org/downloads/
