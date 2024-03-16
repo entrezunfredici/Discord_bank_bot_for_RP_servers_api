@@ -1,3 +1,4 @@
+#this open api is no complete 
 #open API
 openapi: 3.0.3
 info:
@@ -187,10 +188,10 @@ paths:
           application/json:
             schema:
               type: object
-              required: [userId, id, password]
+              required: [userName, id, password]
               properties:
-                userId:
-                  type: integer
+                userName:
+                  type: string
                 id:
                   type: integer
                 password:
@@ -251,12 +252,12 @@ paths:
           application/json:
             schema:
               type: object
-              required: [Id, userId, sum, type]
+              required: [Id, userName, sum, type]
               properties:
                 id:
                   type: integer
-                userId:
-                  type: integer
+                userName:
+                  type: string
                 sum:
                   type: number
                 type:
